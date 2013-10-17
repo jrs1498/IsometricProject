@@ -1,0 +1,7 @@
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\IsometricProject.exe
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\IsometricProject.pdb
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.csprojResolveAssemblyReference.cache
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.exe
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.pdb
+D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\point.xnb
