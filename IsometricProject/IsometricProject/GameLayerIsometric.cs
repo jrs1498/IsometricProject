@@ -9,13 +9,21 @@ namespace IsometricProject
 {
     public class GameLayerIsometric : GameLayer
     {
+        #region Attributes
+        private Tile[,] _tiles;
+        private const int _tileWidth = 175;
+        private const int _tileHeight = 175;
+        #endregion
+
         #region Constructor Code
         /// <summary>
         /// A GameLayer which can hold isometric content
         /// </summary>
-        public GameLayerIsometric(GameLevel gameLevel, float parallaxAmount)
+        public GameLayerIsometric(GameLevel gameLevel, float parallaxAmount, int numRows, int numCols)
             : base(gameLevel, parallaxAmount)
         {
+            _tiles = new Tile[numRows, numCols];
+            BuildTiles();
         }
         #endregion
 
@@ -35,6 +43,16 @@ namespace IsometricProject
                 null,
                 _camTransformation);
 
+            // Draw tiles
+            for (int i = 0; i < _tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < _tiles.GetLength(1); j++)
+                {
+                    Tile currTile = _tiles[i, j];
+                    currTile.GetComponent<GOCDrawable>().DrawIsometric(gameTime, spriteBatch);
+                }
+            }
+
             // Draw any applicable GameObjects in this layer
             foreach (GameObject go in _gameObjects)
             {
@@ -47,5 +65,22 @@ namespace IsometricProject
             spriteBatch.End();
         }
         #endregion
+
+        private void BuildTiles()
+        {
+            Texture2D tileTexture = _gameLevel.Content.Load<Texture2D>("Textures/tile");
+            for (int i = 0; i < _tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < _tiles.GetLength(1); j++)
+                {
+                    Tile tile = new Tile(tileTexture);
+                    tile.Size = new Vector2(_tileWidth, _tileHeight);
+                    tile.Displacement = new Vector2(
+                        i * _tileWidth,
+                        j * _tileHeight);
+                    _tiles[i, j] = tile;
+                }
+            }
+        }
     }
 }

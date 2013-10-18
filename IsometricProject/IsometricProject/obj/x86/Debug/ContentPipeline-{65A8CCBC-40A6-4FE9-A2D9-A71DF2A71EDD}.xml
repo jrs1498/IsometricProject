@@ -2,13 +2,13 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
-      <Source>Textures\point.png</Source>
-      <Name>Textures\point</Name>
+      <Source>Textures\tile.png</Source>
+      <Name>Textures\tile</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\point.xnb</Output>
-      <Time>2013-10-14T23:33:58.1129888-04:00</Time>
+      <Output>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\tile.xnb</Output>
+      <Time>2013-10-18T11:57:20.5441104-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -46,6 +46,10 @@
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
         <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>D:\Projects\Programming\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll</Key>
+        <Value>2013-10-18T11:41:57.1092929-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>

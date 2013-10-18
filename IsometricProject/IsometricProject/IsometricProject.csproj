@@ -93,6 +93,7 @@
     <Compile Include="ScreenHandler.cs" />
     <Compile Include="SpriteBatchIsometric.cs" />
     <Compile Include="TestObject.cs" />
+    <Compile Include="Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -101,6 +102,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DataTypes\DataTypes.csproj">
+      <Project>{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}</Project>
+      <Name>DataTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IsometricProjectContent\IsometricProjectContent.contentproj">
       <Name>IsometricProjectContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

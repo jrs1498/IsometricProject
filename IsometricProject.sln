@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsometricProject", "IsometricProject\IsometricProject\IsometricProject.csproj", "{AFE83B9D-6D42-4A29-BB83-AF8BF88DE099}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "IsometricProjectContent", "IsometricProject\IsometricProjectContent\IsometricProjectContent.contentproj", "{65A8CCBC-40A6-4FE9-A2D9-A71DF2A71EDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsometricProjectContent", "IsometricProject\IsometricProjectContent\IsometricProjectContent.contentproj", "{65A8CCBC-40A6-4FE9-A2D9-A71DF2A71EDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "DataTypes\DataTypes.csproj", "{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{AFE83B9D-6D42-4A29-BB83-AF8BF88DE099}.Release|x86.Build.0 = Release|x86
 		{65A8CCBC-40A6-4FE9-A2D9-A71DF2A71EDD}.Debug|x86.ActiveCfg = Debug|x86
 		{65A8CCBC-40A6-4FE9-A2D9-A71DF2A71EDD}.Release|x86.ActiveCfg = Release|x86
+		{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}.Debug|x86.ActiveCfg = Debug|x86
+		{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}.Debug|x86.Build.0 = Debug|x86
+		{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}.Release|x86.ActiveCfg = Release|x86
+		{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

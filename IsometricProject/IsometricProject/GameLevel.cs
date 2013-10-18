@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
+using DataTypes;
 
 namespace IsometricProject
 {
@@ -37,10 +40,9 @@ namespace IsometricProject
             _gameScreen = gameScreen;
             _gameLayers = new List<GameLayer>();
             _camera = new Camera2D(_gameScreen.GraphicsDevice);
-
-            // TEST CODDE
-            AddLayer(5.0f);
-            AddLayer(1.0f);
+            
+            // TEST CODE
+            AddIsometricLayer(1.0f, 20, 20);
         }
         #endregion
 
@@ -100,34 +102,60 @@ namespace IsometricProject
         }
         #endregion
 
-        #region Containment Code
+        #region Loading & Saving Code
+        public void LoadLevel(string filename)
+        { 
+            
+        }
+
+        public void SaveLevel(string filename)
+        {
+            // Set the save path and writer settings
+            string savePath = "..\\..\\..\\..\\IsometricProjectContent\\Levels\\" + filename + ".xml";
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+
+            // ---------- Start Data Packaging ----------
+            GameLevelData levelData = new GameLevelData(_gameLayers.Count);
+            for (int i = 0; i < _gameLayers.Count; i++)
+            {
+                GameLayer currLayer = _gameLayers[i];
+                GameLayerData layerData = new GameLayerData(currLayer.GetType(), currLayer.GameObjects.Count);
+                for (int j = 0; j < currLayer.GameObjects.Count; j++)
+                {
+                    GameObject currObject = currLayer.GameObjects[j];
+                    GameObjectData objectData = new GameObjectData();
+                    objectData.position = currObject.Displacement;
+
+                    layerData.gameObjects[j] = objectData;
+                }
+
+                levelData.layers[i] = layerData;
+            }
+
+            // ---------- End Data Packaging ----------
+
+            // Write the file
+            using (XmlWriter writer = XmlWriter.Create(savePath, settings))
+                IntermediateSerializer.Serialize(writer, levelData, null);
+        }
+
         /// <summary>
-        /// Use this function to add a layer to this GameLevel
+        /// Add a GameLayer to this level
         /// </summary>
         private void AddLayer(float parallaxAmount)
         {
-            GameLayerIsometric layer = new GameLayerIsometric(this, parallaxAmount);
+            GameLayer layer = new GameLayer(this, parallaxAmount);
             _gameLayers.Add(layer);
+        }
 
-            // TEST CODE
-            Texture2D testTexture = Content.Load<Texture2D>("Textures/point");
-
-            int testrows = 20;
-            int testcols = 20;
-            int testwidth = 200;
-            int testheight = 200;
-
-            for (int i = 0; i < testrows; i++)
-            {
-                for (int j = 0; j < testcols; j++)
-                {
-                    TestObject testObj = new TestObject(testTexture);
-                    testObj.Displacement = new Vector2(
-                        i * testheight,
-                        j * testwidth);
-                    layer.AddObject(testObj);
-                }
-            }
+        /// <summary>
+        /// Add an IsometricGameLayer with specified tile resolution to this level
+        /// </summary>
+        private void AddIsometricLayer(float parallaxAmount, int numRows, int numCols)
+        {
+            GameLayerIsometric layer = new GameLayerIsometric(this, parallaxAmount, numRows, numCols);
+            _gameLayers.Add(layer);
         }
         #endregion
     }

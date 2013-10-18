@@ -1,0 +1,6 @@
+D:\Projects\Programming\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll
+D:\Projects\Programming\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.pdb
+D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.csprojResolveAssemblyReference.cache
+D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
+D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb

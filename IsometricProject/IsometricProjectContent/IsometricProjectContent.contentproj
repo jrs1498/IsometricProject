@@ -30,8 +30,17 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\point.png">
-      <Name>point</Name>
+    <ProjectReference Include="..\..\DataTypes\DataTypes.csproj">
+      <Project>{A1220A45-1F4F-4948-9B33-0AA4B9A5E7BB}</Project>
+      <Name>DataTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Levels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\tile.png">
+      <Name>tile</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
