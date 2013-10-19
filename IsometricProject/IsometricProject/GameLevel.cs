@@ -18,6 +18,8 @@ namespace IsometricProject
         private GameScreen _gameScreen;
         private List<GameLayer> _gameLayers;
         private Camera2D _camera;
+
+        private Dictionary<string, Tile> _tileTypes;
         #endregion
 
         #region Properties
@@ -33,16 +35,43 @@ namespace IsometricProject
 
         #region Constructor Code
         /// <summary>
-        /// Create a GameLevel which handles all game world activity
+        /// GameLevel handles all game activity
+        /// This constructor creates a new GameLevel with provided tile resolution
+        /// and populates with a default tile
         /// </summary>
-        public GameLevel(GameScreen gameScreen)
+        /// <param name="gameScreen">GameScreen which contains this GameLevel</param>
+        /// <param name="numTileRows">Number of tile rows in this GameLevel</param>
+        /// <param name="numTileCols">Number of tile columns in this GameLevel</param>
+        /// <param name="defaultTile">TileName for specified default tile. Check tiles.xml for TileNames</param>
+        public GameLevel(GameScreen gameScreen, int numTileRows, int numTileCols, string defaultTile)
         {
-            _gameScreen = gameScreen;
-            _gameLayers = new List<GameLayer>();
-            _camera = new Camera2D(_gameScreen.GraphicsDevice);
-            
-            // TEST CODE
-            AddIsometricLayer(1.0f, 20, 20);
+            Construct(gameScreen);
+
+            NewLevel(numTileRows, numTileCols, _tileTypes[defaultTile]);
+        }
+
+        /// <summary>
+        /// GameLevel handles all game activity
+        /// This constructor loads a GameLevel from a provided file
+        /// </summary>
+        /// <param name="gameScreen">GameScreen which contains this GameLevel</param>
+        /// <param name="filename">Filename to load this GameLevel from</param>
+        public GameLevel(GameScreen gameScreen, string filename)
+        {
+            Construct(gameScreen);
+
+            LoadLevel(filename);
+        }
+
+        /// <summary>
+        /// Common constructor code
+        /// Should be called by all constructors
+        /// </summary>
+        private void Construct(GameScreen gameScreen)
+        {
+            _gameScreen = gameScreen;               // Set the game screen to the screen that brought us here
+            _gameLayers = new List<GameLayer>();    // Initialize GameLayers list so we can add to it
+            LoadTileTypes();                        // Load all tile types so we can use them as references
         }
         #endregion
 
@@ -102,60 +131,112 @@ namespace IsometricProject
         }
         #endregion
 
-        #region Loading & Saving Code
-        public void LoadLevel(string filename)
-        { 
+        #region Saving & Loading Code
+        /// <summary>
+        /// Create a new GameLevel with the specified tile resolution
+        /// and populate it using the specified default tile
+        /// </summary>
+        /// <param name="numTileRows">Number of tile rows</param>
+        /// <param name="numTileCols">Number of tile columns</param>
+        /// <param name="defaultTile">This tile will populate the entire level</param>
+        public void NewLevel(int numTileRows, int numTileCols, Tile defaultTile)
+        {
+            // ---------- Prepare for new level ----------
+            ClearLevel();
+
+            // ---------- Create camera ----------
+            _camera = new Camera2D(_gameScreen.GraphicsDevice);
             
+            // ---------- Create isometric layer ----------
+            GameLayerIsometric isometricLayer = new GameLayerIsometric(this, numTileRows, numTileCols, defaultTile);
+            _gameLayers.Add(isometricLayer);
+
+            // Example code, changing one of the tiles
+            TileReferencer refTile = isometricLayer.TileReferences[9, 4];
+            refTile.Elevation = 200;
+            refTile.ReferenceTile = _tileTypes["GrassTile"];
         }
 
+        /// <summary>
+        /// Loads the specified GameLevel from a provided XML file
+        /// </summary>
+        /// <param name="filename">Filename to load. Do NOT include extension</param>
+        public void LoadLevel(string filename)
+        { 
+            // ---------- Prepare for loading ----------
+            ClearLevel();
+            string loadPath = "Levels\\" + filename;
+            GameLevelData levelData = Content.Load<GameLevelData>(loadPath);
+
+            // ---------- Begin loading ----------
+            int numLayers = levelData.GameLayerData.Count();
+            for (int i = 0; i < numLayers; i++)
+            {
+                GameLayerData currLayerData = levelData.GameLayerData[i];
+                Console.WriteLine(currLayerData);
+            }
+
+            // ---------- End loading ----------
+
+            Console.WriteLine("Successfully loaded game level from filename: " + filename);
+        }
+
+        /// <summary>
+        /// Save the current GameLevel to an XML file with the specified filename
+        /// </summary>
+        /// <param name="filename">Save file with this name. Do NOT include extension.</param>
         public void SaveLevel(string filename)
         {
-            // Set the save path and writer settings
+            // ---------- Prepare for saving ----------
             string savePath = "..\\..\\..\\..\\IsometricProjectContent\\Levels\\" + filename + ".xml";
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
 
-            // ---------- Start Data Packaging ----------
-            GameLevelData levelData = new GameLevelData(_gameLayers.Count);
-            for (int i = 0; i < _gameLayers.Count; i++)
-            {
-                GameLayer currLayer = _gameLayers[i];
-                GameLayerData layerData = new GameLayerData(currLayer.GetType(), currLayer.GameObjects.Count);
-                for (int j = 0; j < currLayer.GameObjects.Count; j++)
-                {
-                    GameObject currObject = currLayer.GameObjects[j];
-                    GameObjectData objectData = new GameObjectData();
-                    objectData.position = currObject.Displacement;
 
-                    layerData.gameObjects[j] = objectData;
-                }
+            // ---------- Begin data packaging ----------
+            int numLayers = _gameLayers.Count;
+            GameLevelData levelData = new GameLevelData(numLayers);
 
-                levelData.layers[i] = layerData;
-            }
+            for (int i = 0; i < numLayers; i++)
+                levelData.GameLayerData[i] = _gameLayers[i].PackageData();
+            // ---------- End data packaging ----------
 
-            // ---------- End Data Packaging ----------
 
-            // Write the file
-            using (XmlWriter writer = XmlWriter.Create(savePath, settings))
+            // ---------- Write the data to the specified filename ----------
+            using(XmlWriter writer = XmlWriter.Create(savePath, settings))
                 IntermediateSerializer.Serialize(writer, levelData, null);
+
+            Console.WriteLine("Successfully saved game level to filename: " + filename);
         }
 
         /// <summary>
-        /// Add a GameLayer to this level
+        /// Clear this GameLevel of all its data, but hang onto the GameScreen
         /// </summary>
-        private void AddLayer(float parallaxAmount)
+        private void ClearLevel()
         {
-            GameLayer layer = new GameLayer(this, parallaxAmount);
-            _gameLayers.Add(layer);
+            _gameLayers.Clear();
+            Console.WriteLine("Current level cleared!");
         }
 
         /// <summary>
-        /// Add an IsometricGameLayer with specified tile resolution to this level
+        /// Load all tile types into tile type dictionary
+        /// Uses the tile's name as the key
         /// </summary>
-        private void AddIsometricLayer(float parallaxAmount, int numRows, int numCols)
+        private void LoadTileTypes()
         {
-            GameLayerIsometric layer = new GameLayerIsometric(this, parallaxAmount, numRows, numCols);
-            _gameLayers.Add(layer);
+            // ---------- Prepare for loading ----------
+            _tileTypes = new Dictionary<string, Tile>();
+            string tileLoadPath = "GameObjects\\";
+            string textureLoadPath = "Textures\\";
+
+            // ---------- Load our tiles.xml file ----------
+            TileTypeData[] tileTypeDataArray = Content.Load<TileTypeData[]>(tileLoadPath + "tiles");
+            foreach (TileTypeData tileTypeData in tileTypeDataArray)
+            {
+                Texture2D tileTexture = Content.Load<Texture2D>(textureLoadPath + tileTypeData.TextureFile);
+                Tile tile = new Tile(tileTypeData.TileName, tileTexture, tileTypeData.TileFlags);
+                _tileTypes.Add(tileTypeData.TileName, tile);
+            }
         }
         #endregion
     }

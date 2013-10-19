@@ -14,6 +14,7 @@ namespace IsometricProject
         private const float pi = (float)Math.PI;
         private float _rotationY;
         private float _rotationDown;
+        private float _rotationDownScale;
         #endregion
 
         #region Properties
@@ -63,9 +64,11 @@ namespace IsometricProject
         /// </summary>
         public void CreateTransformation()
         {
+            _rotationDownScale = 1.0f - (float)Math.Sin(_rotationDown);
+
             _isometricTransformation =
                 Matrix.CreateRotationZ(_rotationY)
-                * Matrix.CreateScale(1.0f, 1.0f - (float)Math.Sin(_rotationDown), 1.0f);
+                * Matrix.CreateScale(1.0f, _rotationDownScale, 1.0f);
         }
 
         public void DrawIsometric(Texture2D texture, Rectangle destinationRectangle, Color color)
@@ -117,8 +120,22 @@ namespace IsometricProject
             base.Draw(texture, Vector2.Transform(position, _isometricTransformation), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
         public void DrawIsometric(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
-        { 
+        {
             base.Draw(texture, Vector2.Transform(position, _isometricTransformation), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+        }
+        public void DrawIsometricElevated(Texture2D texture, Vector3 positionWithElevation, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
+        {
+            // Transform X and Y component into isometric space
+            Vector2 position;
+            position.X = positionWithElevation.X;
+            position.Y = positionWithElevation.Y;
+            position = Vector2.Transform(position, _isometricTransformation);
+
+            // Z component represents elevation
+            position.Y -= (positionWithElevation.Z * _rotationDownScale);
+
+            // Base handles the rest
+            base.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
     }
 }

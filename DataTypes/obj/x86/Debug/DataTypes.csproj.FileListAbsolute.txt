@@ -4,3 +4,15 @@ D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.cspro
 D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
 D:\Projects\Programming\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.pdb
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.csprojResolveAssemblyReference.cache
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
+\\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.pdb
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.csprojResolveAssemblyReference.cache
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
+Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb

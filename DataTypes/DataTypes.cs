@@ -11,40 +11,102 @@ using Microsoft.Xna.Framework.Media;
 
 namespace DataTypes
 {
-    public class GameObjectData
-    {
-        public Vector2 position;
-    }
-
-    public class GameLayerData
-    {
-        public Type layerType;
-        public GameObjectData[] gameObjects;
-
-        public GameLayerData()
-        { 
-            
-        }
-
-        public GameLayerData(Type gameLayerType, int numObjects)
-        {
-            layerType = gameLayerType;
-            gameObjects = new GameObjectData[numObjects];
-        }
-    }
-
+    /// <summary>
+    /// Packages GameLevel data
+    /// </summary>
     public class GameLevelData
     {
-        public GameLayerData[] layers;
+        #region Members
+        public GameLayerData[] GameLayerData;
+        #endregion
 
-        public GameLevelData()
-        { 
-            
-        }
+        #region Constructor Code
+        /// <summary>
+        /// Parameterless constructor required for loading
+        /// </summary>
+        public GameLevelData() { }
 
-        public GameLevelData(int numLayers)
+        /// <summary>
+        /// Packaging constructor
+        /// </summary>
+        /// <param name="gameLayersCount">Numbers of game layers</param>
+        public GameLevelData(int gameLayersCount)
         {
-            layers = new GameLayerData[numLayers];
+            GameLayerData = new GameLayerData[gameLayersCount];
         }
+        #endregion
+    }
+
+    /// <summary>
+    /// Packages GameLayer data
+    /// </summary>
+    public class GameLayerData
+    { 
+        
+    }
+
+    /// <summary>
+    /// Packages GameLayerIsometric data
+    /// </summary>
+    public class GameLayerIsometricData : GameLayerData
+    {
+        #region Members
+        public TileReferencerData[] TileReferencers;
+        #endregion
+
+        #region Constructor Code
+        /// <summary>
+        /// Parameterless constructor required for loading
+        /// </summary>
+        public GameLayerIsometricData() { }
+
+        /// <summary>
+        /// Packaging constructor
+        /// </summary>
+        /// <param name="numTiles">Number of tiles in the 2D array</param>
+        public GameLayerIsometricData(int numTiles)
+        {
+            TileReferencers = new TileReferencerData[numTiles];
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// Packages GameObject data
+    /// </summary>
+    public class GameObjectData
+    {
+    }
+
+    /// <summary>
+    /// Packages TileReferencer data
+    /// </summary>
+    public class TileReferencerData : GameObjectData
+    {
+        #region Members
+        public int RowIndex;
+        public int ColIndex;
+        public string TileReferenceName;
+        #endregion
+
+        #region Constructor Code
+        /// <summary>
+        /// Parameterless constructor required for loading
+        /// </summary>
+        public TileReferencerData() { }
+
+        /// <summary>
+        /// Packaging constructor
+        /// </summary>
+        /// <param name="rowIndex">2D Array row index</param>
+        /// <param name="colIndex">2D Array column index</param>
+        /// <param name="tileReferenceName">The reference tile</param>
+        public TileReferencerData(int rowIndex, int colIndex, string tileReferenceName)
+        {
+            RowIndex = rowIndex;
+            ColIndex = colIndex;
+            TileReferenceName = tileReferenceName;
+        }
+        #endregion
     }
 }

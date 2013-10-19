@@ -18,6 +18,10 @@ namespace IsometricProject
         public Texture2D Texture
         {
             get { return _texture; }
+            set
+            {
+                _texture = value;
+            }
         }
         public Color DrawColor
         {
@@ -59,6 +63,33 @@ namespace IsometricProject
                 _texture,
                 _parent.Displacement,
                 _drawColor);
+        }
+
+        /// <summary>
+        /// Draws the GameObject using this component's texture and color
+        /// Draws to SpriteBatchIsometric's isometric coordinates
+        /// Includes GameObject's elevation
+        /// </summary>
+        public void DrawIsometricElevated(GameTime gameTime, SpriteBatchIsometric spriteBatch)
+        {
+            // Create a Vector3 using GameObjects X and Y,
+            // use elevation amount as Z component
+            Vector3 displacementWithElevation;
+            displacementWithElevation.X = _parent.Displacement.X;
+            displacementWithElevation.Y = _parent.Displacement.Y;
+            displacementWithElevation.Z = _parent.Elevation;
+
+            // Draw as usual
+            spriteBatch.DrawIsometricElevated(
+                _texture,
+                displacementWithElevation,
+                null,
+                _drawColor,
+                0f,
+                Vector2.Zero,
+                1.0f,
+                SpriteEffects.None,
+                0f);
         }
         #endregion
     }

@@ -23,7 +23,7 @@ namespace IsometricProject
         public GameScreen(ScreenHandler screenHandler)
             : base(screenHandler)
         {
-            _gameLevel = new GameLevel(this);
+            _gameLevel = new GameLevel(this, 10, 10, "StoneSandTile");
         }
         #endregion
 

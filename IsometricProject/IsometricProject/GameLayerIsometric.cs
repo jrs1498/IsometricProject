@@ -4,26 +4,49 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DataTypes;
 
 namespace IsometricProject
 {
     public class GameLayerIsometric : GameLayer
     {
         #region Attributes
-        private Tile[,] _tiles;
-        private const int _tileWidth = 175;
-        private const int _tileHeight = 175;
+        private const int TILE_WIDTH    = 70;
+        private const int TILE_HEIGHT   = 70;
+
+        private TileReferencer[,] _tileReferences;      // This 2D array holds tile information
+        #endregion
+
+        #region Properties
+        public TileReferencer[,] TileReferences
+        {
+            get { return _tileReferences; }
+        }
         #endregion
 
         #region Constructor Code
         /// <summary>
-        /// A GameLayer which can hold isometric content
+        /// GameLayer which draws content using an isometric view
+        /// This constructor creates a new GameLayerIsometric
         /// </summary>
-        public GameLayerIsometric(GameLevel gameLevel, float parallaxAmount, int numRows, int numCols)
-            : base(gameLevel, parallaxAmount)
+        /// <param name="gameLevel">GameLevel containing this layer</param>
+        /// <param name="numTileRows">Number of tile rows</param>
+        /// <param name="numTileCols">Number of tile columns</param>
+        /// <param name="defaultTile">Fills the entire layer with this tile</param>
+        public GameLayerIsometric(GameLevel gameLevel, int numTileRows, int numTileCols, Tile defaultTile)
+            : base(gameLevel)
         {
-            _tiles = new Tile[numRows, numCols];
-            BuildTiles();
+            // ---------- Initialize tile array resolution ----------
+            _tileReferences = new TileReferencer[numTileRows, numTileCols];
+            
+            // ---------- Populate tile array with default tile ----------
+            for (int i = 0; i < numTileRows; i++)
+                for (int j = 0; j < numTileCols; j++)
+                {
+                    TileReferencer tileReferencer = new TileReferencer(TILE_WIDTH, TILE_HEIGHT, defaultTile);
+                    tileReferencer.Displacement = new Vector2(i * TILE_WIDTH, j * TILE_HEIGHT);
+                    _tileReferences[i, j] = tileReferencer;
+                }
         }
         #endregion
 
@@ -43,17 +66,17 @@ namespace IsometricProject
                 null,
                 _camTransformation);
 
-            // Draw tiles
-            for (int i = 0; i < _tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < _tiles.GetLength(1); j++)
-                {
-                    Tile currTile = _tiles[i, j];
-                    currTile.GetComponent<GOCDrawable>().DrawIsometric(gameTime, spriteBatch);
-                }
-            }
+            // ---------- Start drawing tiles ----------
 
-            // Draw any applicable GameObjects in this layer
+            for (int i = 0; i < _tileReferences.GetLength(0); i++)
+                for (int j = 0; j < _tileReferences.GetLength(1); j++)
+                    _tileReferences[i, j].GetComponent<GOCDrawable>().DrawIsometricElevated(gameTime, spriteBatch);
+
+            // ---------- End drawing tiles ----------
+
+
+            // ---------- Start drawing GameObjects ----------
+
             foreach (GameObject go in _gameObjects)
             {
                 GOCDrawable drawableComponent = go.GetComponent<GOCDrawable>();
@@ -61,26 +84,30 @@ namespace IsometricProject
                     drawableComponent.DrawIsometric(gameTime, spriteBatch);
             }
 
-            // End drawing
+            // ---------- End drawing GameObjects ----------
+
+            // End drawing from this GameLayer
             spriteBatch.End();
         }
         #endregion
 
-        private void BuildTiles()
+        #region Saving & Loading Code
+        /// <summary>
+        /// Packages this GameLayerIsometric data and returns it
+        /// </summary>
+        public override GameLayerData PackageData()
         {
-            Texture2D tileTexture = _gameLevel.Content.Load<Texture2D>("Textures/tile");
-            for (int i = 0; i < _tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < _tiles.GetLength(1); j++)
-                {
-                    Tile tile = new Tile(tileTexture);
-                    tile.Size = new Vector2(_tileWidth, _tileHeight);
-                    tile.Displacement = new Vector2(
-                        i * _tileWidth,
-                        j * _tileHeight);
-                    _tiles[i, j] = tile;
-                }
-            }
+            int numRows = _tileReferences.GetLength(0);
+            int numCols = _tileReferences.GetLength(1);
+            GameLayerIsometricData layerData = new GameLayerIsometricData(numRows * numCols);
+
+            // ---------- Package the TileReferences in a 1D array ----------
+            for (int i = 0; i < numRows; i++)
+                for (int j = 0; j < numCols; j++)
+                    layerData.TileReferencers[j + (numRows * i)] = _tileReferences[i, j].PackageData(i, j);
+
+            return layerData;
         }
+        #endregion
     }
 }

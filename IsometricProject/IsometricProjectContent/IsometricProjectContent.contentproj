@@ -36,11 +36,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Levels\" />
+    <Compile Include="Levels\turdexample.xml">
+      <Name>turdexample</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\tile.png">
-      <Name>tile</Name>
+    <Compile Include="GameObjects\tiles.xml">
+      <Name>tiles</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\grasstile.png">
+      <Name>grasstile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\stonesandtile.png">
+      <Name>stonesandtile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\stonetile.png">
+      <Name>stonetile</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DataTypes;
 
 namespace IsometricProject
 {
@@ -11,6 +12,7 @@ namespace IsometricProject
     {
         #region Attributes
         private Rectangle _rectangle;
+        private int _elevation;
         private Dictionary<Type, GameObjectComponent> _components;
         #endregion
 
@@ -49,6 +51,14 @@ namespace IsometricProject
         public int Y
         {
             get { return _rectangle.Y; }
+        }
+        public int Elevation
+        {
+            get { return _elevation; }
+            set
+            {
+                _elevation = value;
+            }
         }
         #endregion
 

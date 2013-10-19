@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DataTypes;
 
 namespace IsometricProject
 {
@@ -17,18 +18,11 @@ namespace IsometricProject
         protected Matrix _camTransformation;
         #endregion
 
-        #region Properties
-        public List<GameObject> GameObjects
-        {
-            get { return _gameObjects; }
-        }
-        #endregion
-
         #region Constructor Code
         /// <summary>
         /// GameLayers operate independently within a GameLevel
         /// </summary>
-        public GameLayer(GameLevel gameLevel, float parallaxAmount)
+        public GameLayer(GameLevel gameLevel, float parallaxAmount = 1.0f)
         {
             _gameLevel = gameLevel;
             _gameObjects = new List<GameObject>();
@@ -79,7 +73,8 @@ namespace IsometricProject
                 null,
                 _camTransformation);
 
-            // Draw any applicable GameObjects in this layer
+            // ---------- Start drawing GameObjects ----------
+
             foreach (GameObject go in _gameObjects)
             {
                 GOCDrawable drawableComponent = go.GetComponent<GOCDrawable>();
@@ -87,8 +82,20 @@ namespace IsometricProject
                     drawableComponent.Draw(gameTime, spriteBatch);
             }
 
+            // ---------- End drawing GameObjects ----------
+
             // End drawing
             spriteBatch.End();
+        }
+        #endregion
+
+        #region Layer Generation Code
+        /// <summary>
+        /// Packages this GameLayer data and returns it
+        /// </summary>
+        public virtual GameLayerData PackageData()
+        {
+            return null;
         }
         #endregion
 

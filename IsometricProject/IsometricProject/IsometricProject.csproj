@@ -92,8 +92,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="ScreenHandler.cs" />
     <Compile Include="SpriteBatchIsometric.cs" />
-    <Compile Include="TestObject.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="TileReferencer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

@@ -2,13 +2,49 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
-      <Source>Textures\tile.png</Source>
-      <Name>Textures\tile</Name>
+      <Source>Levels\turdexample.xml</Source>
+      <Name>Levels\turdexample</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <Options>None</Options>
+      <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\turdexample.xnb</Output>
+      <Time>2013-10-18T18:46:34.120124-04:00</Time>
+    </Item>
+    <Item>
+      <Source>GameObjects\Tiles.xml</Source>
+      <Name>GameObjects\Tiles</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <Options>None</Options>
+      <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\GameObjects\Tiles.xnb</Output>
+      <Time>2013-10-18T20:46:04.541956-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Textures\grasstile.png</Source>
+      <Name>Textures\grasstile</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\tile.xnb</Output>
-      <Time>2013-10-18T11:57:20.5441104-04:00</Time>
+      <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\grasstile.xnb</Output>
+      <Time>2013-10-18T20:45:02.832218-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Textures\stonesandtile.png</Source>
+      <Name>Textures\stonesandtile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\stonesandtile.xnb</Output>
+      <Time>2013-10-18T20:45:02.6502-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Textures\stonetile.png</Source>
+      <Name>Textures\stonetile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\stonetile.xnb</Output>
+      <Time>2013-10-18T20:45:02.528188-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -17,43 +53,43 @@
       <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProjectContent\</RootDirectory>
-      <LoggerRootDirectory>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProjectContent\</RootDirectory>
+      <LoggerRootDirectory>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\</LoggerRootDirectory>
+      <IntermediateDirectory>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
-        <Value>2011-09-01T16:22:30-04:00</Value>
+        <Value>2012-09-06T14:52:54-04:00</Value>
       </Assembly>
       <Assembly>
-        <Key>D:\Projects\Programming\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll</Key>
-        <Value>2013-10-18T11:41:57.1092929-04:00</Value>
+        <Key>Z:\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll</Key>
+        <Value>2013-10-18T19:32:07.671922-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2013-09-05T19:37:20.5531349-04:00</Value>
+        <Value>2013-07-31T14:49:41.0611548-04:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

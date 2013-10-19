@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+  <Asset Type="DataTypes.TileTypeData[]">
+    <Item>
+      <TileName>StoneTile</TileName>
+      <TextureFile>stonetile</TextureFile>
+      <TileFlags>3</TileFlags>
+    </Item>
+    <Item>
+      <TileName>StoneSandTile</TileName>
+      <TextureFile>stonesandtile</TextureFile>
+      <TileFlags>2</TileFlags>
+    </Item>
+    <Item>
+      <TileName>GrassTile</TileName>
+      <TextureFile>grasstile</TextureFile>
+      <TileFlags>0</TileFlags>
+    </Item>
+  </Asset>
+</XnaContent>
