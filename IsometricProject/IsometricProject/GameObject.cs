@@ -11,54 +11,32 @@ namespace IsometricProject
     public class GameObject
     {
         #region Attributes
-        private Rectangle _rectangle;
-        private int _elevation;
+        private Vector3 _displacement;
         private Dictionary<Type, GameObjectComponent> _components;
         #endregion
 
         #region Properties
-        public Vector2 Displacement
+        public Vector3 Displacement
         {
-            get
-            {
-                return new Vector2(_rectangle.X, _rectangle.Y);
-            }
+            get { return _displacement; }
             set
             {
-                _rectangle.X = (int)value.X;
-                _rectangle.Y = (int)value.Y;
+                _displacement = value;
                 OnPositionChange();
             }
         }
-        public Vector2 Size
-        {
-            get
-            {
-                return new Vector2(_rectangle.Width, _rectangle.Height);
-            }
-            set
-            {
-                _rectangle.Width = (int)value.X;
-                _rectangle.Height = (int)value.Y;
-                OnSizeChange();
-            }
-        }
 
-        public int X
+        public float X
         {
-            get { return _rectangle.X; }
+            get { return _displacement.X; }
         }
-        public int Y
+        public float Y
         {
-            get { return _rectangle.Y; }
+            get { return _displacement.Y; }
         }
-        public int Elevation
+        public float Z
         {
-            get { return _elevation; }
-            set
-            {
-                _elevation = value;
-            }
+            get { return _displacement.Z; }
         }
         #endregion
 
@@ -84,30 +62,7 @@ namespace IsometricProject
         }
 
         /// <summary>
-        /// Create a GameObject, which is the main type for all game world objects
-        /// Size: specified, Position: (0,0)
-        /// </summary>
-        public GameObject(int width, int height)
-        {
-            Size = new Vector2(width, height);
-
-            Construct();
-        }
-
-        /// <summary>
-        /// Create a GameObject, which is the main type for all game world objects
-        /// Size: specified, Position: specified
-        /// </summary>
-        public GameObject(int width, int height, int x, int y)
-        {
-            Size = new Vector2(width, height);
-            Displacement = new Vector2(x, y);
-
-            Construct();
-        }
-
-        /// <summary>
-        /// Primary constructor code
+        /// Common constructor code
         /// </summary>
         private void Construct()
         {

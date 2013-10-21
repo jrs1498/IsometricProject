@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+  <!-- TODO: replace this Asset with your own XML asset data. -->
+  <Asset Type="DataTypes.TileTypeData[]">
+    <Item>
+      <TileReferenceCode>1</TileReferenceCode>
+      <TextureFileName>grasstile</TextureFileName>
+      <TileFlags>1</TileFlags>
+    </Item>
+    <Item>
+      <TileReferenceCode>2</TileReferenceCode>
+      <TextureFileName>stonetile</TextureFileName>
+      <TileFlags>2</TileFlags>
+    </Item>
+    <Item>
+      <TileReferenceCode>3</TileReferenceCode>
+      <TextureFileName>stonesandtile</TextureFileName>
+      <TileFlags>3</TileFlags>
+    </Item>
+    <Item>
+      <TileReferenceCode>4</TileReferenceCode>
+      <TextureFileName>sandtile</TextureFileName>
+      <TileFlags>3</TileFlags>
+    </Item>
+    <Item>
+      <TileReferenceCode>5</TileReferenceCode>
+      <TextureFileName>rocktile</TextureFileName>
+      <TileFlags>3</TileFlags>
+    </Item>
+  </Asset>
+</XnaContent>

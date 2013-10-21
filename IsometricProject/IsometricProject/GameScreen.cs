@@ -13,9 +13,6 @@ namespace IsometricProject
         private GameLevel _gameLevel;
         #endregion
 
-        #region Properties
-        #endregion
-
         #region Constructor Code
         /// <summary>
         /// Creates a GameScreen which handles gameplay
@@ -23,7 +20,8 @@ namespace IsometricProject
         public GameScreen(ScreenHandler screenHandler)
             : base(screenHandler)
         {
-            _gameLevel = new GameLevel(this, 10, 10, "StoneSandTile");
+            _gameLevel = new GameLevel(this, "turdmonkey");
+            //_gameLevel = new GameLevel(this, 20, 80, 3);
         }
         #endregion
 
@@ -48,7 +46,7 @@ namespace IsometricProject
         {
             // Draw the GameLevel
             _gameLevel.Draw(gameTime, spriteBatch);
-
+            
             base.Draw(gameTime, spriteBatch);
         }
         #endregion

@@ -63,9 +63,9 @@ namespace IsometricProject
         #endregion
 
         #region Mouse Functions
-        public static Point GetMouseLocation()
+        public static Vector2 GetMouseLocation()
         {
-            return new Point(_mStateCurr.X, _mStateCurr.Y);
+            return new Vector2(_mStateCurr.X, _mStateCurr.Y);
         }
 
         /// <summary>

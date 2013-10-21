@@ -81,7 +81,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="GameLayer.cs" />
-    <Compile Include="GameLayerIsometric.cs" />
+    <Compile Include="GameLayerTiled.cs" />
     <Compile Include="GameLevel.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameObjectComponent.cs" />
@@ -92,8 +92,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="ScreenHandler.cs" />
     <Compile Include="SpriteBatchIsometric.cs" />
-    <Compile Include="Tile.cs" />
-    <Compile Include="TileReferencer.cs" />
+    <Compile Include="TileSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

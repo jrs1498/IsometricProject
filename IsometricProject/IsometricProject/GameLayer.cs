@@ -18,6 +18,13 @@ namespace IsometricProject
         protected Matrix _camTransformation;
         #endregion
 
+        #region Properties
+        public GameLevel GameLevel
+        {
+            get { return _gameLevel; }
+        }
+        #endregion
+
         #region Constructor Code
         /// <summary>
         /// GameLayers operate independently within a GameLevel

@@ -10,6 +10,7 @@ namespace IsometricProject
     {
         #region Attributes
         private Matrix _isometricTransformation;
+        private Matrix _isometricTransformationInverse;
 
         private const float pi = (float)Math.PI;
         private float _rotationY;
@@ -62,80 +63,49 @@ namespace IsometricProject
         /// <summary>
         /// Calculate the isometric transformation matrix
         /// </summary>
-        public void CreateTransformation()
+        private void CreateTransformation()
         {
             _rotationDownScale = 1.0f - (float)Math.Sin(_rotationDown);
 
             _isometricTransformation =
                 Matrix.CreateRotationZ(_rotationY)
                 * Matrix.CreateScale(1.0f, _rotationDownScale, 1.0f);
+
+            _isometricTransformationInverse = Matrix.Invert(_isometricTransformation);
         }
 
-        public void DrawIsometric(Texture2D texture, Rectangle destinationRectangle, Color color)
+        public Vector2 IsometricToCartesian(Vector2 isometricCoordinates)
         {
-            Vector2 position;
-            position.X = destinationRectangle.X;
-            position.Y = destinationRectangle.Y;
+            Vector2 cartesianCoordinates = Vector2.Transform(isometricCoordinates, _isometricTransformationInverse);
 
-            position = Vector2.Transform(position, _isometricTransformation);
-            destinationRectangle.X = (int)position.X;
-            destinationRectangle.Y = (int)position.Y;
-
-            base.Draw(texture, destinationRectangle, color);
+            return cartesianCoordinates;
         }
-        public void DrawIsometric(Texture2D texture, Vector2 position, Color color)
+        private Vector2 CartesianToIsometric(Vector3 cartesianCoordinates)
         {
-            base.Draw(texture, Vector2.Transform(position, _isometricTransformation), color);
+            Vector2 isometricCoordinates;
+            isometricCoordinates.X = cartesianCoordinates.X;
+            isometricCoordinates.Y = cartesianCoordinates.Z;
+            isometricCoordinates = Vector2.Transform(isometricCoordinates, _isometricTransformation);
+            isometricCoordinates.Y -= (cartesianCoordinates.Y * _rotationDownScale);
+
+            return isometricCoordinates;
         }
-        public void DrawIsometric(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
+
+        public void DrawIsometric(Texture2D texture, Vector3 position, Color color)
         {
-            Vector2 position;
-            position.X = destinationRectangle.X;
-            position.Y = destinationRectangle.Y;
-
-            position = Vector2.Transform(position, _isometricTransformation);
-            destinationRectangle.X = (int)position.X;
-            destinationRectangle.Y = (int)position.Y;
-
-            base.Draw(texture, destinationRectangle, sourceRectangle, color);
+            base.Draw(texture, CartesianToIsometric(position), color);
         }
-        public void DrawIsometric(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
+        public void DrawIsometric(Texture2D texture, Vector3 position, Rectangle? sourceRectangle, Color color)
         {
-            base.Draw(texture, Vector2.Transform(position, _isometricTransformation), sourceRectangle, color);
+            base.Draw(texture, CartesianToIsometric(position), sourceRectangle, color);
         }
-        public void DrawIsometric(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects, float layerDepth)
-        { 
-            Vector2 position;
-            position.X = destinationRectangle.X;
-            position.Y = destinationRectangle.Y;
-
-            position = Vector2.Transform(position, _isometricTransformation);
-            destinationRectangle.X = (int)position.X;
-            destinationRectangle.Y = (int)position.Y;
-
-            base.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, layerDepth);
-        }
-        public void DrawIsometric(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
-        { 
-            base.Draw(texture, Vector2.Transform(position, _isometricTransformation), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
-        }
-        public void DrawIsometric(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        public void DrawIsometric(Texture2D texture, Vector3 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            base.Draw(texture, Vector2.Transform(position, _isometricTransformation), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+            base.Draw(texture, CartesianToIsometric(position), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
-        public void DrawIsometricElevated(Texture2D texture, Vector3 positionWithElevation, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
+        public void DrawIsometric(Texture2D texture, Vector3 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            // Transform X and Y component into isometric space
-            Vector2 position;
-            position.X = positionWithElevation.X;
-            position.Y = positionWithElevation.Y;
-            position = Vector2.Transform(position, _isometricTransformation);
-
-            // Z component represents elevation
-            position.Y -= (positionWithElevation.Z * _rotationDownScale);
-
-            // Base handles the rest
-            base.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+            base.Draw(texture, CartesianToIsometric(position), sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
     }
 }

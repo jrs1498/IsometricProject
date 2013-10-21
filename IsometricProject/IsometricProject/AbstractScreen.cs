@@ -23,6 +23,10 @@ namespace IsometricProject
         {
             get { return _screenHandler.GraphicsDevice; }
         }
+        public SpriteBatchIsometric SpriteBatch
+        {
+            get { return _screenHandler.SpriteBatch; }
+        }
         #endregion
 
         #region Constructor Code

@@ -23,6 +23,13 @@ namespace IsometricProject
         private AbstractScreen _screen;
         #endregion
 
+        #region Properties
+        public SpriteBatchIsometric SpriteBatch
+        {
+            get { return _spriteBatch; }
+        }
+        #endregion
+
         #region Constructor Code
         /// <summary>
         /// ScreenHandler is the main type for this game.
@@ -34,6 +41,8 @@ namespace IsometricProject
 
             _graphicsMngr.PreferredBackBufferWidth = SCREEN_WIDTH;
             _graphicsMngr.PreferredBackBufferHeight = SCREEN_HEIGHT;
+
+            //IsMouseVisible = true;
         }
         #endregion
 

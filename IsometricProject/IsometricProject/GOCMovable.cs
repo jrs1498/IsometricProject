@@ -9,12 +9,12 @@ namespace IsometricProject
     public class GOCMovable : GameObjectComponent
     {
         #region Attributes
-        private Vector2 _acceleration;
-        private Vector2 _velocity;
+        private Vector3 _acceleration;
+        private Vector3 _velocity;
         #endregion
 
         #region Properties
-        private Vector2 Acceleration
+        private Vector3 Acceleration
         {
             get { return _acceleration; }
             set
@@ -22,7 +22,7 @@ namespace IsometricProject
                 _acceleration = value;
             }
         }
-        public Vector2 Velocity
+        public Vector3 Velocity
         {
             get { return _velocity; }
             set
@@ -50,13 +50,13 @@ namespace IsometricProject
         {
             _velocity += _acceleration;
 
-            if (_velocity != Vector2.Zero)
+            if (_velocity != Vector3.Zero)
                 _parent.Displacement += _velocity;
         }
         #endregion
 
         #region Accessibility
-        public void Move(Vector2 amount)
+        public void Move(Vector3 amount)
         {
             _parent.Displacement += amount;
         }

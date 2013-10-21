@@ -14,6 +14,8 @@ namespace IsometricProject
 
         private Boolean _requiresCamTransform;
 
+        private Vector2 _origin;
+
         private float _zoom;
         private const float _maxZoom = 2.0f;
         private const float _minZoom = 0.01f;
@@ -23,6 +25,10 @@ namespace IsometricProject
         public Boolean RequiresCamTransform
         {
             get { return _requiresCamTransform; }
+        }
+        public Vector2 Origin
+        {
+            get { return _origin; }
         }
         public float Zoom
         {
@@ -56,6 +62,7 @@ namespace IsometricProject
         {
             _graphicsDevice = graphicsDevice;
 
+            _origin = new Vector2(graphicsDevice.Viewport.Width / 2.0f, graphicsDevice.Viewport.Height / 2.0f);
             _zoom = 1.0f;
 
             // Components
@@ -86,7 +93,7 @@ namespace IsometricProject
             return
                 Matrix.CreateTranslation(new Vector3(-Displacement.X * parallaxAmount, -Displacement.Y * parallaxAmount, 0))
                 * Matrix.CreateScale(_zoom)
-                * Matrix.CreateTranslation(new Vector3(_graphicsDevice.Viewport.Width / 2.0f, _graphicsDevice.Viewport.Height / 2.0f, 0));
+                * Matrix.CreateTranslation(new Vector3(_origin.X, _origin.Y, 0));
         }
         #endregion
     }
