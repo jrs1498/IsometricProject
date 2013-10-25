@@ -1,3 +1,4 @@
 D:\Projects\Programming\IsometricProject\IsometricProject\IsometricProjectContent\obj\x86\Debug\IsometricProjectContent.contentprojResolveAssemblyReference.cache
 \\banner.main.ad.rit.edu\students\jrs1498\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProjectContent\obj\x86\Debug\IsometricProjectContent.contentprojResolveAssemblyReference.cache
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProjectContent\obj\x86\Debug\IsometricProjectContent.contentprojResolveAssemblyReference.cache
+D:\Repositories\IsometricProject\IsometricProject\IsometricProjectContent\obj\x86\Debug\ResolveAssemblyReference.cache

@@ -11,6 +11,14 @@ namespace IsometricProject
     {
         #region Attributes
         private GameLevel _gameLevel;
+        private ContentLibrary _contentLibrary;
+        #endregion
+
+        #region Properties
+        public ContentLibrary ContentLib
+        {
+            get { return _contentLibrary; }
+        }
         #endregion
 
         #region Constructor Code
@@ -20,6 +28,8 @@ namespace IsometricProject
         public GameScreen(ScreenHandler screenHandler)
             : base(screenHandler)
         {
+            _contentLibrary = new ContentLibrary(Content);
+
             _gameLevel = new GameLevel(this, "turdmonkey");
             //_gameLevel = new GameLevel(this, 20, 80, 3);
         }

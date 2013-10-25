@@ -39,4 +39,25 @@ namespace DataTypes
     {
         public TileSystemData TileSystemData;
     }
+
+    public class CL_Data
+    {
+        public short ReferenceID;
+
+        public CL_Data(short referenceID = 0)
+        {
+            ReferenceID = referenceID;
+        }
+    }
+
+    public class CL_ObjTypeData : CL_Data
+    {
+        public string TextureName;
+
+        public CL_ObjTypeData(short referenceID = 0, string textureName = "")
+            : base(referenceID)
+        {
+            TextureName = textureName;
+        }
+    }
 }

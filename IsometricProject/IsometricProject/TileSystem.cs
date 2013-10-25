@@ -13,18 +13,31 @@ namespace IsometricProject
     public class TileSystem
     {
         #region Attributes
-        private const int TILE_SIZE = 70;               // The face size of a tile (square / cube)
         private GameLayer _gameLayer;                   // GameLayer containing this TileSystem
 
-        private TileReferencer[,] _tileReferencers;     // 2D array holding tile information
+        private const int TILE_SIZE = 70;               // The face size of a tile (square / cube)
+        private TileRef[,] _tiles;                      // 2D tile array
         private int _numRows;                           // Used for array iteration
         private int _numCols;
-
-        private Dictionary<byte, TileType> _tileTypes;  // Dictionary holding all loaded TileTypes
 
         private List<Vector2> _selectedIndices;         // List of Vector2 containing index information for selected tiles
         private int _selectionSize;                     // Square size of tile selection
         private Texture2D _selectionTexture;            // Texture to draw over selected tiles
+        #endregion
+
+        #region Properties
+        public ContentManager Content
+        {
+            get { return _gameLayer.Content; }
+        }
+        public ContentLibrary ContentLib
+        {
+            get { return _gameLayer.ContentLib; }
+        }
+        public Dictionary<short, CL_ObjType> TileTypes
+        {
+            get { return ContentLib.GetLoadedFile("tiletypes"); }
+        }
         #endregion
 
         #region Enum
@@ -44,65 +57,53 @@ namespace IsometricProject
         /// <param name="numCols">Number of tile columns</param>
         private void Construct(GameLayerTiled gameLayer, int numRows, int numCols)
         {
-            // ---------- Load TileType dictionary ----------
             _gameLayer = gameLayer;
-            ContentManager contentManager = gameLayer.GameLevel.Content;
-            _tileTypes = new Dictionary<byte, TileType>();
-            string tileLoadPath = "ReferenceData\\tiletypes";
-            string textureLoadPath = "Textures\\";
-            TileTypeData[] tileTypeData = contentManager.Load<TileTypeData[]>(tileLoadPath);
-            for (int i = 0; i < tileTypeData.Count(); i++)
-            {
-                TileTypeData currData = tileTypeData[i];
-                Texture2D tileTypeTexture = contentManager.Load<Texture2D>(textureLoadPath + currData.TextureFileName);
-                TileType tileType = new TileType(currData.TileReferenceCode, tileTypeTexture, currData.TileFlags);
-                _tileTypes.Add(currData.TileReferenceCode, tileType);
-            }
 
-            // ---------- Allocate tile array attributes ----------
-            _tileReferencers = new TileReferencer[numRows, numCols];
+            // ---------- Load TileTypes into ContentLibrary ----------
+            ContentLib.LoadTypesFromFile<TileTypeData, TileType>("ReferenceData\\", "tiletypes");
+
+            // ---------- Allocate 2D tile array ----------
+            _tiles = new TileRef[numRows, numCols];
             _numRows = numRows;
             _numCols = numCols;
 
             // ---------- Allocate tile selection attributes ----------
             _selectedIndices = new List<Vector2>();
             _selectionSize = 2;
-            _selectionTexture = contentManager.Load<Texture2D>("Textures/tileselector");
+            _selectionTexture = Content.Load<Texture2D>("Textures/tileselector");
         }
 
         /// <summary>
-        /// Generate a new TileSystem
+        /// Create a new TileSystem
         /// </summary>
-        /// <param name="defaultTileReferenceCode">TileReferenceCode for default tile which will fill the system</param>
-        public TileSystem(GameLayerTiled gameLayer, int numRows, int numCols, byte defaultTileReferenceCode)
+        /// <param name="defaultTile">ReferenceID for default tile which will fill the system</param>
+        public TileSystem(GameLayerTiled gameLayer, int numRows, int numCols, short defaultTile)
         {
             Construct(gameLayer, numRows, numCols);
 
-            // ---------- Populate TileSystem with default tile ----------
-            for (int i = 0; i < numRows; i++)
-                for (int j = 0; j < numCols; j++)
+            // ---------- Populate 2D tile array with specified tile ----------
+            for (int i = 0; i < _numRows; i++)
+                for (int j = 0; j < _numCols; j++)
                 {
-                    TileReferencer tileReferencer = new TileReferencer(defaultTileReferenceCode, 0);
-                    _tileReferencers[i, j] = tileReferencer;
+                    TileRef tile = new TileRef(defaultTile, 0);
+                    _tiles[i, j] = tile;
                 }
         }
 
         /// <summary>
-        /// Create a TileSystem from specified data
+        /// Load a TileSystem from data file
         /// </summary>
         public TileSystem(GameLayerTiled gameLayer, TileSystemData tileSystemData)
         {
-            int numRows = tileSystemData.NumRows;
-            int numCols = tileSystemData.NumCols;
-            Construct(gameLayer, numRows, numCols);
+            Construct(gameLayer, tileSystemData.NumRows, tileSystemData.NumCols);
 
-            // ---------- Populate the TileSystem with specified data ----------
-            for (int i = 0; i < numRows; i++)
-                for (int j = 0; j < numCols; j++)
+            // ---------- Populate 2D tile array with specified data ----------
+            for (int i = 0; i < _numRows; i++)
+                for (int j = 0; j < _numCols; j++)
                 {
-                    TileReferencerData currTileData = tileSystemData.TileReferencers[j + (i * numCols)];
-                    TileReferencer tileReferencer = new TileReferencer(currTileData.TileReferenceCode, currTileData.Elevation);
-                    _tileReferencers[i, j] = tileReferencer;
+                    int current1Dindex = j + (i * _numCols);
+                    TileRef tile = new TileRef(tileSystemData.Tiles[current1Dindex]);
+                    _tiles[i, j] = tile;
                 }
         }
         #endregion
@@ -156,8 +157,8 @@ namespace IsometricProject
             {
                 int rowIndex = (int)index.X;
                 int colIndex = (int)index.Y;
-
-                _tileReferencers[rowIndex, colIndex].Elevation += (byte)amount;
+            
+                _tiles[rowIndex, colIndex].Elevation += (byte)amount;
             }
         }
         private void Smooth(float strength)
@@ -166,26 +167,26 @@ namespace IsometricProject
             if (numItems == 0)
                 return;
             int elevationSum = 0;
-
+            
             // First pass lets us calculate the average
             foreach (Vector2 index in _selectedIndices)
-                elevationSum += _tileReferencers[(int)index.X, (int)index.Y].Elevation;
+                elevationSum += _tiles[(int)index.X, (int)index.Y].Elevation;
             int average = elevationSum / numItems;
             
             // Second pass lets us set the elevations
             foreach (Vector2 index in _selectedIndices)
             {
-                byte currentElevation = _tileReferencers[(int)index.X, (int)index.Y].Elevation;
+                byte currentElevation = _tiles[(int)index.X, (int)index.Y].Elevation;
                 int modifyElevation = (int)((average - currentElevation) * strength);
-
+            
                 if (modifyElevation < 0)
                 {
                     byte subtractBy = (byte)Math.Abs(modifyElevation);
-                    _tileReferencers[(int)index.X, (int)index.Y].Elevation -= subtractBy;
+                    _tiles[(int)index.X, (int)index.Y].Elevation -= subtractBy;
                 }
                 else
                 {
-                    _tileReferencers[(int)index.X, (int)index.Y].Elevation += (byte)modifyElevation;
+                    _tiles[(int)index.X, (int)index.Y].Elevation += (byte)modifyElevation;
                 }
             }
         }
@@ -195,35 +196,40 @@ namespace IsometricProject
         #region Draw Code
         public void Draw(GameTime gameTime, SpriteBatchIsometric spriteBatch)
         {
-            // ---------- Draw all tiles in this system ----------
-            TileReferencer currTile;
-            Texture2D currTexture;
-            
+            // ---------- Draw all tiles ----------
             for (int i = 0; i < _numRows; i++)
                 for (int j = 0; j < _numCols; j++)
                 {
-                    currTile = _tileReferencers[i, j];
-                    currTexture = _tileTypes[currTile.TileReferenceCode].Texture;
-            
+                    TileRef currTile = _tiles[i, j];
+
+                    Vector3 tilePosition;
+                    tilePosition.X = i * TILE_SIZE;
+                    tilePosition.Y = currTile.Elevation * TILE_SIZE;
+                    tilePosition.Z = j * TILE_SIZE;
+
                     spriteBatch.DrawIsometric(
-                        currTexture,
-                        GetPositionFromIndex(i, currTile.Elevation, j),
+                        TileTypes[currTile.ReferenceID].Texture,
+                        tilePosition,
                         Color.White);
                 }
 
-            // ---------- Draw tile selection indicator ----------
-            foreach (Vector2 selectedIndex in _selectedIndices)
+            // ---------- Draw selection indicators ----------
+            foreach (Vector2 index in _selectedIndices)
             {
-                int rowIndex = (int)selectedIndex.X;
-                int colIndex = (int)selectedIndex.Y;
-                byte elevation = _tileReferencers[rowIndex, colIndex].Elevation;
+                int x = (int)index.X;
+                int y = (int)index.Y;
+                TileRef currTile = _tiles[x, y];
+
+                Vector3 drawPosition;
+                drawPosition.X = x * TILE_SIZE;
+                drawPosition.Y = currTile.Elevation * TILE_SIZE;
+                drawPosition.Z = y * TILE_SIZE;
 
                 spriteBatch.DrawIsometric(
                     _selectionTexture,
-                    GetPositionFromIndex(rowIndex, elevation, colIndex),
+                    drawPosition,
                     Color.White);
             }
-                    
         }
         #endregion
 
@@ -284,14 +290,12 @@ namespace IsometricProject
         public TileSystemData PackageData()
         {
             // ---------- Prepare to package data ----------
-            int numRows = _tileReferencers.GetLength(0);
-            int numCols = _tileReferencers.GetLength(1);
-            TileSystemData data = new TileSystemData(numRows, numCols);
+            TileSystemData data = new TileSystemData(_numRows, _numCols);
 
             // ---------- Begin data package ----------
-            for (int i = 0; i < numRows; i++)
-                for (int j = 0; j < numCols; j++)
-                    data.TileReferencers[j + (i * numCols)] = _tileReferencers[i, j].PackageData();
+            for (int i = 0; i < _numRows; i++)
+                for (int j = 0; j < _numCols; j++)
+                    data.Tiles[j + (i * _numCols)] = _tiles[i, j].PackageData();
             // ---------- End data package ----------
 
             return data;
@@ -299,26 +303,15 @@ namespace IsometricProject
         #endregion
     }
 
+
     /// <summary>
     /// TileType class specifies different types of tiles which may be placed
     /// in the GameLevel. Only one of each TileType should exist in memory
     /// </summary>
-    public class TileType
+    public class TileType : CL_ObjType
     {
         #region Attributes
-        private byte _tileReferenceCode;    // Used by TileReferencers
-        private Texture2D _texture;         // This TileType's texture
-        private TileFlags _tileFlags;       // How this TileType may be used
-        #endregion
-
-        #region Properties
-        public Texture2D Texture
-        {
-            get { return _texture; }
-        }
-        #endregion
-
-        #region Enum
+        private TileFlags _tileFlags;               // How this TileType may be used
         [Flags]
         public enum TileFlags : byte
         { 
@@ -327,18 +320,38 @@ namespace IsometricProject
         }
         #endregion
 
+        #region Constructor Code
         /// <summary>
-        /// Creates a new TileType
+        /// Common constructor code
         /// </summary>
-        /// <param name="tileReferenceCode">Used by TileReferencers</param>
-        /// <param name="texture">Texture to draw for this tile</param>
-        /// <param name="tileFlags">TileType functionality</param>
-        public TileType(byte tileReferenceCode, Texture2D texture, byte tileFlags = 0)
+        private void Construct(byte tileFlags)
         {
-            _tileReferenceCode = tileReferenceCode;
-            _texture = texture;
             _tileFlags = (TileFlags)tileFlags;
         }
+
+        /// <summary>
+        /// Create a new TileType
+        /// </summary>
+        /// <param name="referenceID">Assigned referenceID</param>
+        /// <param name="texture">Drawing texture</param>
+        /// <param name="tileFlags">Check class definition</param>
+        public TileType(short referenceID, Texture2D texture, byte tileFlags = 0)
+            : base(referenceID, texture)
+        {
+            Construct(tileFlags);
+        }
+
+        /// <summary>
+        /// Load a TileType from data
+        /// </summary>
+        /// <param name="data">Object containing TileType data</param>
+        /// <param name="texture">Drawing texture</param>
+        public TileType(TileTypeData data, Texture2D texture)
+            : base(data.ReferenceID, texture)
+        {
+            Construct(data.TileFlags);
+        }
+        #endregion
 
         /// <summary>
         /// Check if this TileType has the specified flag
@@ -351,23 +364,14 @@ namespace IsometricProject
         }
     }
 
-    /// <summary>
-    /// A TileReferencer is loaded into a TileSystem's 2D tile array
-    /// to represent a TileType somewhere in the world.
-    /// </summary>
-    public struct TileReferencer
-    {
-        #region Attributes
-        private byte _tileReferenceCode;    // Corresponds to TileType.TileReferenceCode
-        private byte _elevation;            // Elevation measured in units of TILE_SIZE
-        #endregion
 
-        #region Properties
-        public byte TileReferenceCode
-        {
-            get { return _tileReferenceCode; }
-            set { _tileReferenceCode = value; }
-        }
+    /// <summary>
+    /// TileRef is loaded into TileSystems 2D tile array
+    /// References a TileType stored in the ContentLibrary
+    /// </summary>
+    public class TileRef : CL_Type
+    {
+        private byte _elevation;        // Indicates level of elevation in units of TILE_SIZE
         public byte Elevation
         {
             get { return _elevation; }
@@ -378,26 +382,45 @@ namespace IsometricProject
                     _elevation = 0;
             }
         }
-        #endregion
 
+        #region Constructor Code
         /// <summary>
-        /// Represents a TileType in the GameLevel
+        /// Common constructor code
         /// </summary>
-        /// <param name="tileReferenceCode">TileType reference code</param>
-        /// <param name="elevation">Elevation in units of TILE_SIZE</param>
-        public TileReferencer(byte tileReferenceCode, byte elevation)
+        private void Construct(byte elevation)
         {
-            _tileReferenceCode = tileReferenceCode;
             _elevation = elevation;
         }
+
+        /// <summary>
+        /// Create a new TileRef
+        /// </summary>
+        /// <param name="referenceID">TileType this TileRef references</param>
+        /// <param name="elevation">Elevation in units of TILE_SIZE</param>
+        public TileRef(short referenceID, byte elevation)
+            : base(referenceID)
+        {
+            Construct(elevation);
+        }
+
+        /// <summary>
+        /// Load a TileRef from specified data
+        /// </summary>
+        /// <param name="data">TileRefData object containing data</param>
+        public TileRef(TileRefData data)
+            : base(data.ReferenceID)
+        {
+            Construct(data.Elevation);
+        }
+        #endregion
 
         /// <summary>
         /// Package this TileReferencer and return its data file
         /// </summary>
         /// <returns>Packaged TileReferencerData</returns>
-        public TileReferencerData PackageData()
+        public TileRefData PackageData()
         {
-            return new TileReferencerData(_tileReferenceCode, _elevation);
+            return new TileRefData(_referenceID, _elevation);
         }
     }
 }

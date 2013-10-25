@@ -29,6 +29,10 @@ namespace IsometricProject
         {
             get { return _gameScreen.Content; }
         }
+        public ContentLibrary ContentLib
+        {
+            get { return _gameScreen.ContentLib; }
+        }
         public GraphicsDevice Graphics
         {
             get { return _gameScreen.GraphicsDevice; }

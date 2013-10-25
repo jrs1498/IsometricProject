@@ -99,7 +99,7 @@ namespace IsometricProject
         /// </summary>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.WhiteSmoke);
 
             // Draw the current screen
             _screen.Draw(gameTime, _spriteBatch);

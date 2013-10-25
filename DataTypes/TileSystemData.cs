@@ -7,43 +7,39 @@ namespace DataTypes
 {
     public class TileSystemData
     {
-        public TileReferencerData[] TileReferencers;
+        public TileRefData[] Tiles;
         public int NumRows;
         public int NumCols;
 
         public TileSystemData() { }
         public TileSystemData(int numRows, int numCols)
         {
-            TileReferencers = new TileReferencerData[numRows * numCols];
+            Tiles = new TileRefData[numRows * numCols];
             NumRows = numRows;
             NumCols = numCols;
         }
     }
 
-    public class TileTypeData
+    public class TileTypeData : CL_ObjTypeData
     {
-        public byte TileReferenceCode;
-        public string TextureFileName;
         public byte TileFlags;
 
         public TileTypeData() { }
-        public TileTypeData(byte tileReferenceCode, string textureFileName, byte tileFlags)
+        public TileTypeData(short referenceID = 0, string textureName = "", byte tileFlags = 0)
+            : base(referenceID, textureName)
         {
-            TileReferenceCode = tileReferenceCode;
-            TextureFileName = textureFileName;
             TileFlags = tileFlags;
         }
     }
 
-    public class TileReferencerData
+    public class TileRefData : CL_Data
     {
-        public byte TileReferenceCode;
         public byte Elevation;
 
-        public TileReferencerData() { }
-        public TileReferencerData(byte tileReferenceCode, byte elevation)
+        public TileRefData() { }
+        public TileRefData(short referenceID = 0, byte elevation = 0)
+            : base(referenceID)
         {
-            TileReferenceCode = tileReferenceCode;
             Elevation = elevation;
         }
     }

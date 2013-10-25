@@ -3,29 +3,29 @@
   <!-- TODO: replace this Asset with your own XML asset data. -->
   <Asset Type="DataTypes.TileTypeData[]">
     <Item>
-      <TileReferenceCode>1</TileReferenceCode>
-      <TextureFileName>grasstile</TextureFileName>
-      <TileFlags>1</TileFlags>
+      <ReferenceID>0</ReferenceID>
+      <TextureName>grasstile</TextureName>
+      <TileFlags>0</TileFlags>
     </Item>
     <Item>
-      <TileReferenceCode>2</TileReferenceCode>
-      <TextureFileName>stonetile</TextureFileName>
+      <ReferenceID>1</ReferenceID>
+      <TextureName>rocktile</TextureName>
       <TileFlags>2</TileFlags>
     </Item>
     <Item>
-      <TileReferenceCode>3</TileReferenceCode>
-      <TextureFileName>stonesandtile</TextureFileName>
+      <ReferenceID>2</ReferenceID>
+      <TextureName>sandtile</TextureName>
       <TileFlags>3</TileFlags>
     </Item>
     <Item>
-      <TileReferenceCode>4</TileReferenceCode>
-      <TextureFileName>sandtile</TextureFileName>
+      <ReferenceID>3</ReferenceID>
+      <TextureName>stonesandtile</TextureName>
       <TileFlags>3</TileFlags>
     </Item>
     <Item>
-      <TileReferenceCode>5</TileReferenceCode>
-      <TextureFileName>rocktile</TextureFileName>
-      <TileFlags>3</TileFlags>
+      <ReferenceID>4</ReferenceID>
+      <TextureName>stonetile</TextureName>
+      <TileFlags>2</TileFlags>
     </Item>
   </Asset>
 </XnaContent>

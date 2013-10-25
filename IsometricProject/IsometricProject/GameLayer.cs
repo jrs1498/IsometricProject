@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using DataTypes;
 
 namespace IsometricProject
@@ -19,6 +20,14 @@ namespace IsometricProject
         #endregion
 
         #region Properties
+        public ContentManager Content
+        {
+            get { return _gameLevel.Content; }
+        }
+        public ContentLibrary ContentLib
+        {
+            get { return _gameLevel.ContentLib; }
+        }
         public GameLevel GameLevel
         {
             get { return _gameLevel; }

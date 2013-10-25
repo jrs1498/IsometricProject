@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="AbstractScreen.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="ContentLibrary.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="GameLayer.cs" />
     <Compile Include="GameLayerTiled.cs" />

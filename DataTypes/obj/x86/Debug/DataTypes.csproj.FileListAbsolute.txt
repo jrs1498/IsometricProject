@@ -16,3 +16,9 @@ Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.cs
 Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
 Z:\IGMProfile\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb
+D:\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll
+D:\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.pdb
+D:\Repositories\IsometricProject\DataTypes\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Repositories\IsometricProject\DataTypes\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.dll
+D:\Repositories\IsometricProject\DataTypes\obj\x86\Debug\DataTypes.pdb
