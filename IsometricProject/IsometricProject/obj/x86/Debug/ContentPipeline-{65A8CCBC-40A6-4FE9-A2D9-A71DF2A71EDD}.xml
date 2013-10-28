@@ -71,7 +71,16 @@
       <Processor>PassThroughProcessor</Processor>
       <Options>None</Options>
       <Output>D:\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\turdmonkey.xnb</Output>
-      <Time>2013-10-25T01:47:00.9218535-04:00</Time>
+      <Time>2013-10-25T01:49:13.5684405-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\interfacefont.spritefont</Source>
+      <Name>Fonts\interfacefont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Fonts\interfacefont.xnb</Output>
+      <Time>2013-10-26T17:32:01.6793721-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

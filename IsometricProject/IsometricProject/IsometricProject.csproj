@@ -79,8 +79,12 @@
   <ItemGroup>
     <Compile Include="AbstractScreen.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="ColorTexture.cs" />
     <Compile Include="ContentLibrary.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Interface\Button.cs" />
+    <Compile Include="Interface\Dropdown.cs" />
+    <Compile Include="Interface\GameInterface.cs" />
     <Compile Include="GameLayer.cs" />
     <Compile Include="GameLayerTiled.cs" />
     <Compile Include="GameLevel.cs" />

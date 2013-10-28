@@ -17,8 +17,8 @@ namespace IsometricProject
         private GraphicsDeviceManager _graphicsMngr;
         private SpriteBatchIsometric _spriteBatch;
 
-        private const int SCREEN_WIDTH = 1280;
-        private const int SCREEN_HEIGHT = 720;
+        private const int SCREEN_WIDTH = 1800;
+        private const int SCREEN_HEIGHT = 900;
 
         private AbstractScreen _screen;
         #endregion
@@ -42,7 +42,7 @@ namespace IsometricProject
             _graphicsMngr.PreferredBackBufferWidth = SCREEN_WIDTH;
             _graphicsMngr.PreferredBackBufferHeight = SCREEN_HEIGHT;
 
-            //IsMouseVisible = true;
+            IsMouseVisible = true;
         }
         #endregion
 
