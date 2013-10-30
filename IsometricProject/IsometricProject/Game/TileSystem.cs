@@ -8,25 +8,18 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using DataTypes;
 
-namespace IsometricProject
+namespace IsometricProject.Game
 {
     public class TileSystem
     {
         #region Attributes
         private GameLayer _gameLayer;                   // GameLayer containing this TileSystem
 
-        // ----- Main tile system -----
         private const int TILE_SIZE = 70;               // The face size of a tile (square / cube)
         private TileRef[,] _tiles;                      // 2D tile array
         private int _numRows;                           // Used for array iteration
         private int _numCols;
 
-        // ----- Edit mode -----
-        private EditMode _currentEditMode;              // Indicates in what way the tile system is currently being edited
-        private Tool _currentTool;                      // Refers to the tool currently being used
-        private short _currentTileReference;            // Refers to the currently selected tile used for placing
-
-        // ----- Selection -----
         private List<Vector2> _selectedIndices;         // List of Vector2 containing index information for selected tiles
         private int _selectionSize;                     // Square size of tile selection
         private Texture2D _selectionTexture;            // Texture to draw over selected tiles
@@ -41,41 +34,17 @@ namespace IsometricProject
         {
             get { return _gameLayer.ContentLib; }
         }
-        private Dictionary<short, CL_ObjType> TileTypes
+        public Dictionary<short, CL_ObjType> TileTypes
         {
             get { return ContentLib.GetLoadedFile("tiletypes"); }
-        }
-
-        public Tool CurrentTool
-        {
-            get { return _currentTool; }
-            set
-            {
-                _currentTool = value;
-                _currentEditMode = EditMode.terrain;
-            }
-        }
-        public short CurrentTileReference
-        {
-            get { return _currentTileReference; }
-            set
-            {
-                _currentTileReference = value;
-                _currentEditMode = EditMode.tile;
-            }
         }
         #endregion
 
         #region Enum
-        public enum EditMode
+        public enum EditMode : byte
         { 
             terrain = 1,    // Modify TileSystem terrain
             tile = 2        // Modify Tiles
-        }
-        public enum Tool
-        { 
-            elevate = 0,    // Raise tiles
-            smooth = 1      // Smooth tiles
         }
         #endregion
 
@@ -143,20 +112,11 @@ namespace IsometricProject
         public void Update(GameTime gameTime)
         {
             SelectionSizeControls();
-            SelectIndices();
-
-            switch (_currentEditMode)
-            { 
-                case EditMode.terrain:
-                    UseTool();
-                    break;
-
-                case EditMode.tile:
-                    PlaceTile();
-                    break;
-            }
+            SelectTerrainIndecies();
+            ModifyTerrain();
         }
 
+        #region Terrain Editing
         private void SelectionSizeControls()
         {
             if (Controller.GetOneKeyPressDown(Keys.OemCloseBrackets))
@@ -168,7 +128,7 @@ namespace IsometricProject
                     _selectionSize = 1;
             }
         }
-        private void SelectIndices()
+        private void SelectTerrainIndecies()
         {
             _selectedIndices.Clear();
             Vector2 mouseIndex = GetMouseOverTileIndex();
@@ -184,34 +144,22 @@ namespace IsometricProject
                             _selectedIndices.Add(new Vector2(rowIndex, colIndex));
                     }
         }
-        private TileRef GetTileFromIndex(Vector2 index)
-        {
-            int rowIndex = (int)index.X;
-            int colIndex = (int)index.Y;
-            return _tiles[rowIndex, colIndex];
-        }
-
-        #region Terrain Editing
-        private void UseTool()
+        private void ModifyTerrain()
         {
             if (Controller.GetOneLeftClickDown())
-            {
-                switch (_currentTool)
-                { 
-                    case Tool.elevate:
-                        Elevate(1);
-                        break;
-                    case Tool.smooth:
-                        Smooth(0.5f);
-                        break;
-                }
-            }
+                //Elevate(1);
+                Smooth(1.0f);
         }
 
-        private void Elevate(byte amount)
+        private void Elevate(int amount)
         {
             foreach (Vector2 index in _selectedIndices)
-                GetTileFromIndex(index).Elevation += amount;
+            {
+                int rowIndex = (int)index.X;
+                int colIndex = (int)index.Y;
+            
+                _tiles[rowIndex, colIndex].Elevation += (byte)amount;
+            }
         }
         private void Smooth(float strength)
         {
@@ -241,15 +189,6 @@ namespace IsometricProject
                     _tiles[(int)index.X, (int)index.Y].Elevation += (byte)modifyElevation;
                 }
             }
-        }
-        #endregion
-
-        #region Tile Editing
-        private void PlaceTile()
-        {
-            if (Controller.GetOneLeftClickDown())
-                foreach (Vector2 index in _selectedIndices)
-                    GetTileFromIndex(index).ReferenceID = _currentTileReference;
         }
         #endregion
         #endregion

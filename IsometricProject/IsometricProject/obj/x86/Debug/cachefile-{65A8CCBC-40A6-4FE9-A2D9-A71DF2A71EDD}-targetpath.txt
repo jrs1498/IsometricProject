@@ -4,6 +4,7 @@ Content\Textures\stonetile.xnb
 Content\Textures\tileselector.xnb
 Content\Textures\sandtile.xnb
 Content\Textures\rocktile.xnb
+Content\Fonts\interfacefont.xnb
 Content\ReferenceData\tiletypes.xnb
 Content\Levels\turdmonkey.xnb
-Content\Fonts\interfacefont.xnb
+Content\Levels\poopies.xnb

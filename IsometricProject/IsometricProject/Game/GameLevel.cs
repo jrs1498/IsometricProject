@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using DataTypes;
 
-namespace IsometricProject
+namespace IsometricProject.Game
 {
     /// <summary>
     /// GameLevel handles all game activity, including loading and saving of game data
@@ -44,10 +44,6 @@ namespace IsometricProject
         public Camera2D Camera
         {
             get { return _camera; }
-        }
-        public GameLayerTiled MainLayer
-        {
-            get { return _mainLayer; }
         }
         #endregion
 
@@ -96,10 +92,14 @@ namespace IsometricProject
 
             // Give the user control of the camera
             CameraControls();
-            IsometricControls();
 
             // Update the main layer
             _mainLayer.Update(gameTime);
+
+            // SAVE
+            if (Controller.GetKeyDown(Keys.LeftControl))
+                if (Controller.GetOneKeyPressDown(Keys.S))
+                    SaveLevel("turdmonkey");
         }
 
         /// <summary>
@@ -126,23 +126,6 @@ namespace IsometricProject
                 _camera.Zoom *= zoomSpeed;
             if (Controller.GetKeyDown(Keys.OemMinus))
                 _camera.Zoom /= zoomSpeed;
-        }
-
-        /// <summary>
-        /// Allows user to control the Isometric angles
-        /// </summary>
-        private void IsometricControls()
-        {
-            float rotationSpeed = 3.14159f / 200;
-            if (Controller.GetKeyDown(Keys.LeftControl))
-                rotationSpeed *= -1;
-
-            if (Controller.GetKeyDown(Keys.P))
-                SpriteBatch.RotationY += rotationSpeed;
-
-            if (Controller.GetKeyDown(Keys.O))
-                SpriteBatch.RotationDown += rotationSpeed;
-
         }
         #endregion
 

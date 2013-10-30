@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DataTypes;
 
-namespace IsometricProject
+namespace IsometricProject.Game
 {
     /// <summary>
     /// GameLayerIsometric acts exactly as a GameLayer, except it contains tile information
@@ -16,13 +16,6 @@ namespace IsometricProject
     {
         #region Attributes
         private TileSystem _tileSystem;
-        #endregion
-
-        #region Properties
-        public TileSystem TileSystem
-        {
-            get { return _tileSystem; }
-        }
         #endregion
 
         #region Constructor Code

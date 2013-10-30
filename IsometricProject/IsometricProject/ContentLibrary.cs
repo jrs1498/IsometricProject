@@ -95,6 +95,7 @@ namespace IsometricProject
         public short ReferenceID
         {
             get { return _referenceID; }
+            set { _referenceID = value; }
         }
 
         public CL_Type(short referenceID)

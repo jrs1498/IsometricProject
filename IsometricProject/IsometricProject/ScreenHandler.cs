@@ -17,8 +17,8 @@ namespace IsometricProject
         private GraphicsDeviceManager _graphicsMngr;
         private SpriteBatchIsometric _spriteBatch;
 
-        private const int SCREEN_WIDTH = 1800;
-        private const int SCREEN_HEIGHT = 900;
+        private const int SCREEN_WIDTH = 1024;
+        private const int SCREEN_HEIGHT = 768;
 
         private AbstractScreen _screen;
         #endregion

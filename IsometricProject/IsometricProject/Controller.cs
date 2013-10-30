@@ -60,6 +60,18 @@ namespace IsometricProject
                 return true;
             return false;
         }
+
+        /// <summary>
+        /// Returns an array of all keys currently pressed
+        /// </summary>
+        public static Keys GetPressedKey()
+        {
+            Keys[] keys = _kbStateCurr.GetPressedKeys();
+            if (keys.Count() > 0)
+                return keys[0];
+
+            return Keys.None;
+        }
         #endregion
 
         #region Mouse Functions

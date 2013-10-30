@@ -9,66 +9,135 @@ namespace IsometricProject.Interface
 {
     public class GI_DropdownMenu : GI_Container
     {
+        #region Attributes
+        private GI_DropdownSubmenu _openSubmenu;
+        #endregion
+
         #region Constructor Code
         /// <summary>
-        /// Create a DropdownMenu which spans across the top of the screen
+        /// Common constructor code
+        /// All constructors should call this method
         /// </summary>
-        /// <param name="gameInterface"></param>
-        /// <param name="texture"></param>
-        public GI_DropdownMenu(GameInterface gameInterface, Texture2D texture)
-            : base(gameInterface, texture, gameInterface.Screen.GraphicsDevice.Viewport.Width, gameInterface.DropdownButtonHeight, 0, 0)
-        { 
-            
-        }
-
-        public GI_DropdownMenu(GameInterface gameInterface, Texture2D texture, int width, int height)
-            : base(gameInterface, texture, width, height)
-        { 
-            
-        }
-        #endregion
-
-        #region Draw Code
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
+        private void Construct()
         {
-            if (_visible)
-            { 
-                // ---------- Draw backdrop ----------
-                spriteBatch.Draw(_texture, _rectangle, BackdropColor * fadeAmount);
+            _openSubmenu = null;
+        }
 
-                // ---------- Base draws buttons ----------
-                base.Draw(gameTime, spriteBatch, fadeAmount);
-            }
+        /// <summary>
+        /// Create a DropdownMenu which spans across the top of the screen
+        /// Specify width and height from supplied GameInterface
+        /// </summary>
+        /// <param name="gameInterface">GameInterface containing this DropdownMenu</param>
+        /// <param name="texture">Texture to apply</param>
+        public GI_DropdownMenu(GameInterface gameInterface, Texture2D texture, bool initiallyVisible = true)
+            : base(gameInterface, texture, gameInterface.Screen.GraphicsDevice.Viewport.Width, gameInterface.DropdownButtonHeight, 0, 0, initiallyVisible)
+        {
+            Construct();
+        }
+
+        /// <summary>
+        /// Creates a DropdownMenu which spans across the top of the screen
+        /// Specify width and height manually
+        /// </summary>
+        /// <param name="gameInterface">GameInterface containing this DropdownMenu</param>
+        /// <param name="texture">Texture to apply</param>
+        /// <param name="width">Width of this menu</param>
+        /// <param name="height">Height of this menu</param>
+        public GI_DropdownMenu(GameInterface gameInterface, Texture2D texture, int width, int height, bool initiallyVisible = true)
+            : base(gameInterface, texture, width, height, initiallyVisible)
+        {
+            Construct();
         }
         #endregion
 
+        #region Update Code
+        public override bool Update(GameTime gameTime)
+        {
+            // Only update if base updates
+            if (base.Update(gameTime))
+            {
+                // If we click outside the menu, close any menu that may be open
+                if (Controller.GetOneLeftClickDown() && !_hovering)
+                    if (_openSubmenu != null)
+                    {
+                        _openSubmenu.Close();
+                        _openSubmenu = null;
+                    }
+
+                // This updated, so return true
+                return true;
+            }
+
+            // This did not update, so return false
+            return false;
+        }
+        #endregion
+
+        #region Containment Code
+        /// <summary>
+        /// Add a submenu to this dropdown menu
+        /// </summary>
+        /// <param name="submenu">Submenu to add</param>
+        /// <param name="title">Button title</param>
         public void AddSubMenu(GI_DropdownSubmenu submenu, string title)
         {
             int width = _gameInterface.DropdownButtonWidth;
             int height = _gameInterface.DropdownButtonHeight;
             int x = _objs.Count * width;
             int y = Top;
+
             GI_DropdownButton button = new GI_DropdownButton(_gameInterface, _texture, width, height, x, y, title);
             _objs.Add(button);
 
+            submenu.Visible = false;
+
             button.Clicked += delegate()
             {
-                if (submenu.IsOpen)
+                if (submenu.Visible)
                     submenu.Close();
                 else
+                {
+                    if (_openSubmenu != null)
+                        _openSubmenu.Close();
+
                     submenu.Open();
+                    _openSubmenu = submenu;
+                }
             };
 
             submenu.Position = new Vector2(
-                Left,
+                button.Left,
                 Bottom);
         }
+
+        /// <summary>
+        /// Add an object to this dropdown menu
+        /// </summary>
+        /// <param name="obj">GI_Obj to open upon clicking</param>
+        /// <param name="title">Button title</param>
+        public virtual void AddObject(GI_Obj obj, string title)
+        {
+            int width = _gameInterface.DropdownButtonWidth;
+            int height = _gameInterface.DropdownButtonHeight;
+            int x = _objs.Count * width;
+            int y = Top;
+
+            GI_DropdownButton button = new GI_DropdownButton(_gameInterface, _texture, width, height, x, y, title);
+            _objs.Add(button);
+
+            button.Clicked += obj.Open;
+        }
+        #endregion
     }
 
+
+    /// <summary>
+    /// DropdownSubmenu handles all dropdown submenu functionality
+    /// </summary>
     public class GI_DropdownSubmenu : GI_DropdownMenu
     {
         public GI_DropdownSubmenu(GameInterface gameInterface, Texture2D texture)
-            : base(gameInterface, texture, gameInterface.DropdownButtonWidth, gameInterface.DropdownButtonHeight)
+            : base(gameInterface, texture, gameInterface.DropdownButtonWidth, gameInterface.DropdownButtonHeight, false)
         {
             PositionChanged += delegate()
             {
@@ -82,34 +151,60 @@ namespace IsometricProject.Interface
             };
         }
 
-        public override void Open()
+        public override bool Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
         {
-            Console.WriteLine("opening");
+            if (_opening || _closing)
+            {
+                float openFactor = HandleOpenClose();
+
+                // Draw all contained items
+                Rectangle drawRect;
+                drawRect.Width = _objs[0].Width;
+                drawRect.Height = _objs[0].Height;
+                drawRect.X = _objs[0].Left;
+                for (int i = 0; i < _objs.Count; i++)
+                {
+                    drawRect.Y = (int)(((float)_objs[i].Top) * openFactor);
+                    _objs[i].Draw(gameTime, spriteBatch, drawRect, openFactor);
+                }
+
+                return true;
+            }
+            else
+            {
+                return base.Draw(gameTime, spriteBatch, null);
+            }
         }
 
-        public override void Close()
-        {
-            Console.WriteLine("closing");
-        }
-
-        public void AddObject(GI_Obj obj, string title)
+        #region Containment Code
+        public void AddButtonForObj(GI_Obj obj, string title)
         { 
+            AddButton(() => { obj.Open(); }, title);
+        }
+
+        public void AddButton(EventHandler clickEvent, string title)
+        {
             int width = _gameInterface.DropdownButtonWidth;
             int height = _gameInterface.DropdownButtonHeight;
             int x = Left;
             int y = _objs.Count * height;
+
             GI_DropdownButton button = new GI_DropdownButton(_gameInterface, _texture, width, height, x, y, title);
             _objs.Add(button);
 
-            button.Clicked += obj.Open;
+            button.Clicked += clickEvent;
 
             Size = new Vector2(
                 Size.X,
                 _objs.Count * height);
         }
+        #endregion
     }
 
 
+    /// <summary>
+    /// DropdownButton is any button contained in the dropdown menu or submenu
+    /// </summary>
     public class GI_DropdownButton : GI_Button
     {
         public GI_DropdownButton(GameInterface gameInterface, Texture2D texture, int width, int height, int x, int y, string title)
@@ -117,54 +212,5 @@ namespace IsometricProject.Interface
         { 
             
         }
-
-        #region Draw Code
-        /// <summary>
-        /// Draw this GI_DropdownButton
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="spriteBatch"></param>
-        /// <param name="rectangle"></param>
-        /// <param name="fadeAmount"></param>
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
-        {
-            // ---------- Rectangle used for drawing ----------
-            Rectangle drawRect;
-            if (rectangle != null)
-                drawRect = (Rectangle)rectangle;
-            else
-                drawRect = _rectangle;
-
-
-            // ---------- Set colors and adjust fade ----------
-            Color textColor;
-            Color backdropColor;
-            if (!_hovering)
-            {
-                textColor       = TraceColor;
-                backdropColor   = BackdropColor;
-            }
-            else
-            {
-                textColor       = BackdropColor;
-                backdropColor   = TraceColor;
-            }
-            textColor           *= fadeAmount;
-            backdropColor       *= fadeAmount;
-
-
-            // ---------- Draw backdrop ----------
-            spriteBatch.Draw(_texture, drawRect, backdropColor);
-            
-
-            // ---------- Draw title ----------
-            Vector2 textSize = InterfaceFont.MeasureString(_title);
-            Point center = drawRect.Center;
-            Vector2 textPosition;
-            textPosition.X = center.X - (textSize.X / 2);
-            textPosition.Y = center.Y - (textSize.Y / 2);
-            spriteBatch.DrawString(InterfaceFont, _title, textPosition, textColor);
-        }
-        #endregion
     }
 }

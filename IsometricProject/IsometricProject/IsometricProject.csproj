@@ -93,6 +93,8 @@
     <Compile Include="GameScreen.cs" />
     <Compile Include="GOCDrawable.cs" />
     <Compile Include="GOCMovable.cs" />
+    <Compile Include="Interface\WindowComponent.cs" />
+    <Compile Include="Interface\Window.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ScreenHandler.cs" />

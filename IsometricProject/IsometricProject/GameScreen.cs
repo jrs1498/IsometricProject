@@ -21,6 +21,10 @@ namespace IsometricProject
         {
             get { return _contentLibrary; }
         }
+        public GameLevel GameLevel
+        {
+            get { return _gameLevel; }
+        }
         #endregion
 
         #region Constructor Code
@@ -34,8 +38,8 @@ namespace IsometricProject
             _contentLibrary = new ContentLibrary(Content);
 
             // ---------- Create GameLevel ----------
-            _gameLevel = new GameLevel(this, "turdmonkey");
-            //_gameLevel = new GameLevel(this, 20, 80, 3);
+            _gameLevel = new GameLevel(this, "poopies");
+            //_gameLevel = new GameLevel(this, 40, 40, 1);
 
             // ---------- Create GameInterface ----------
             _gameInterface = new GameInterface(this);

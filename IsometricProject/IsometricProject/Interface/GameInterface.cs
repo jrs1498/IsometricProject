@@ -13,18 +13,28 @@ namespace IsometricProject.Interface
     public class GameInterface
     {
         #region Attributes
-        private AbstractScreen _screen;
+        private GameScreen _screen;
         private List<GI_Obj> _objs;
+
+        // ========== Interface Functionality Attributes ==========
+        private char[] _validChars = 
+        {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+        'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1',
+        '2', '3', '4', '5', '6', '7', '8', '9'};
+        private int _textInputCooldown      = 30;
+        private int _labelLeftSpacing       = 10;
+        private int _textBoxTopSpacing      = 20;
+        // ========================================================
 
         // ========== Interface Style Attributes ==========
         private SpriteFont _interfaceFont;
 
-        private int _traceThickness         = 1;
+        private int _traceThickness         = 2;
         private int _titlebarThickness      = 20;
         private Color _traceColor           = new Color(200, 200, 200, 175);
         private Color _backdropColor        = new Color(0, 0, 0, 175);
 
-        private int _initialWindowWidth     = 500;
+        private int _initialWindowWidth     = 700;
         private int _initialWindowHeight    = 500;
 
         private int _windowButtonWidth      = 100;
@@ -33,16 +43,33 @@ namespace IsometricProject.Interface
         private int _dropdownButtonWidth    = 100;
         private int _dropdownButtonHeight   = 20;
         // ================================================
+
         // ======== Interface Animation Attributes ========
-        private int _fadeOverFrames         = 10;
-        private int _expandOverFrames       = 5;
+        private int _openOverFrames         = 5;
         // ================================================
         #endregion
 
         #region Properties
-        public AbstractScreen Screen
+        public GameScreen Screen
         {
             get { return _screen; }
+        }
+
+        public char[] ValidChars
+        {
+            get { return _validChars; }
+        }
+        public int TextInputCooldown
+        {
+            get { return _textInputCooldown; }
+        }
+        public int LabelLeftSpacing
+        {
+            get { return _labelLeftSpacing; }
+        }
+        public int TextBoxTopSpacing
+        {
+            get { return _textBoxTopSpacing; }
         }
 
         public SpriteFont InterfaceFont
@@ -88,13 +115,9 @@ namespace IsometricProject.Interface
             get { return _dropdownButtonHeight; }
         }
 
-        public int FadeOverFrames
+        public int OpenOverFrames
         {
-            get { return _fadeOverFrames; }
-        }
-        public int ExpandOverFrames
-        {
-            get { return _expandOverFrames; }
+            get { return _openOverFrames; }
         }
         #endregion
 
@@ -102,7 +125,7 @@ namespace IsometricProject.Interface
         /// <summary>
         /// Creates a new GameInterface, which provides access to all menus, windows and buttons
         /// </summary>
-        public GameInterface(AbstractScreen screen)
+        public GameInterface(GameScreen screen)
         {
             _screen = screen;
             _objs = new List<GI_Obj>();
@@ -117,16 +140,78 @@ namespace IsometricProject.Interface
         #region Load Interface Code
         private void LoadInterface(Texture2D texture)
         {
-            GI_DropdownSubmenu submenu1 = new GI_DropdownSubmenu(this, texture);
-            _objs.Add(submenu1);
+            GI_DropdownMenu mainmenu = new GI_DropdownMenu(this, texture);
+            _objs.Add(mainmenu);
 
-            for (int i = 0; i < 5; i++)
+            // ---------- File submenu ----------
+            GI_DropdownSubmenu file = new GI_DropdownSubmenu(this, texture);
+            _objs.Add(file);
+
+            file.AddButton(() => { Console.WriteLine("New level placeholder button"); }, "New");
+            file.AddButton(() => { _screen.GameLevel.SaveLevel("poopies"); }, "Save");
+            file.AddButton(() => { Console.WriteLine("save as button"); }, "Save As");
+            file.AddButton(() => { Console.WriteLine("Open file placeholder button"); }, "Open");
+
+            mainmenu.AddSubMenu(file, "File");
+
+            // ---------- Tools submenu ----------
+            GI_DropdownSubmenu tools = new GI_DropdownSubmenu(this, texture);
+            _objs.Add(tools);
+
+            tools.AddButton(() => { _screen.GameLevel.MainLayer.TileSystem.CurrentTool = TileSystem.Tool.elevate; }, "Elevate");
+            tools.AddButton(() => { _screen.GameLevel.MainLayer.TileSystem.CurrentTool = TileSystem.Tool.smooth; }, "Smooth");
+
+            mainmenu.AddSubMenu(tools, "Tools");
+
+            // ========== WINDOWS SUBMENU START ==========
+            GI_DropdownSubmenu windows = new GI_DropdownSubmenu(this, texture);
+            _objs.Add(windows);
+
+            // ----- Content Browser -----
+            GI_Window contentBrowser = new GI_Window(this, texture, _initialWindowWidth, _initialWindowHeight, 200, 200, "Content Browser");
+            windows.AddButtonForObj(contentBrowser, "Content Browser");
+            _objs.Add(contentBrowser);
+
+            contentBrowser.MainCell.Split(true, 0.6f);
+            contentBrowser.MainCell.Child2.Split(false, 0.7f);
+
+            GI_WindowCell contentCell   = contentBrowser.MainCell.Child1;
+            GI_WindowCell infoCell      = contentBrowser.MainCell.Child2.Child1;
+            GI_WindowCell fileCell      = contentBrowser.MainCell.Child2.Child2;
+
+            // Info cell
+            Vector2 selectorSize = new Vector2(100, 140);
+            Vector2 selectorPosition;
+            selectorPosition.X = (infoCell.Left + (infoCell.Width / 2)) - (selectorSize.X / 2);
+            selectorPosition.Y = infoCell.Top + 10;
+            GI_WindowCellObj selectionIndicator = new GI_WindowCellObj(this, texture, (int)selectorSize.X, (int)selectorSize.Y, (int)selectorPosition.X, (int)selectorPosition.Y, infoCell);
+
+            Vector2 textFieldSize = new Vector2(120, 16);
+            GI_TextField textfieldRefernceID = new GI_TextField(this, texture, (int)textFieldSize.X, (int)textFieldSize.Y, infoCell.Left + (infoCell.Width / 2), infoCell.Bottom - 100, infoCell, "Reference ID:");
+            GI_TextField textfieldTextureName = new GI_TextField(this, texture, (int)textFieldSize.X, (int)textFieldSize.Y, infoCell.Left + (infoCell.Width / 2), textfieldRefernceID.Bottom + 10, infoCell, "Texture Name:");
+
+            // Content cell
+            Dictionary<short, CL_ObjType> content = _screen.ContentLib.GetLoadedFile("tiletypes");
+            int i = 0;
+            foreach (KeyValuePair<short, CL_ObjType> element in content)
             {
-                GI_Obj randomobj = new GI_Obj(this, texture, 400, 400);
-                submenu1.AddObject(randomobj, "item " + i);
+                CL_ObjType tile = new CL_ObjType(element.Value.ReferenceID, element.Value.Texture);
+                GI_ContentButton button = new GI_ContentButton(this, 50, 70, contentCell.Left + (i * 60), contentCell.Top, tile);
+                contentCell.AddObject(button);
+                button.Clicked += delegate()
+                {
+                    _screen.GameLevel.MainLayer.TileSystem.CurrentTileReference = tile.ReferenceID;
+                    selectionIndicator.Texture = tile.Texture;
+                    textfieldRefernceID.Text = "" + tile.ReferenceID;
+                    textfieldTextureName.Text = tile.Texture.ToString();
+                };
+                i++;
             }
 
-            submenu1.Position = new Vector2(200, 200);
+            // ----- Another Window -----
+
+            mainmenu.AddSubMenu(windows, "Windows");
+            // ========== WINDOWS SUBMENU END ==========
         }
         #endregion
 
@@ -171,16 +256,20 @@ namespace IsometricProject.Interface
         protected Rectangle             _rectangle;
         protected Boolean               _hovering;
         protected Boolean               _visible;
-        protected Boolean               _isOpen;
         #endregion
 
         #region Properties
         public Texture2D Texture
         {
             get { return _texture; }
+            set { _texture = value; }
         }
 
-        public Vector2 Position
+        public Rectangle Rectangle
+        {
+            get { return _rectangle; }
+        }
+        public virtual Vector2 Position
         {
             get
             {
@@ -243,7 +332,7 @@ namespace IsometricProject.Interface
             get { return _rectangle.Height; }
         }
 
-        public Boolean Visible
+        public virtual Boolean Visible
         {
             get { return _visible; }
             set { _visible = value; }
@@ -252,11 +341,6 @@ namespace IsometricProject.Interface
         {
             get { return _hovering; }
             set { _hovering = value; }
-        }
-        public virtual Boolean IsOpen
-        {
-            get { return _isOpen; }
-            set { _isOpen = value; }
         }
 
         public SpriteFont InterfaceFont
@@ -285,6 +369,8 @@ namespace IsometricProject.Interface
         public event EventHandler Clicked;
         public event EventHandler PositionChanged;
         public event EventHandler SizeChanged;
+        public event EventHandler Opened;
+        public event EventHandler Closed;
         #endregion
 
         #region Constructor Code
@@ -301,8 +387,7 @@ namespace IsometricProject.Interface
             _rectangle.Height = height;
 
             _hovering = false;
-            _visible = true;
-            _isOpen = true;
+            Visible = true;
         }
 
         /// <summary>
@@ -327,48 +412,27 @@ namespace IsometricProject.Interface
 
         #region Update Code
         /// <summary>
-        /// Update this GI_Obj
+        /// Base update checks for mouse hovering and mouse clicks
         /// </summary>
-        public virtual void Update(GameTime gameTime)
+        /// <returns>True if this is currently updatig</returns>
+        public virtual bool Update(GameTime gameTime)
         {
-            CheckHovering();
-
-            if (_hovering)
-                if (Controller.GetOneLeftClickDown())
-                    OnClick();
-        }
-        #endregion
-
-        #region Draw Code
-        /// <summary>
-        /// Draw this GI_Obj
-        /// </summary>
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
-        {
+            // Only update if this GI_Obj is visible
             if (_visible)
             {
-                Rectangle drawRect;
-                if (rectangle != null)
-                    drawRect = (Rectangle)rectangle;
-                else
-                    drawRect = _rectangle;
+                CheckHovering();
 
-                spriteBatch.Draw(
-                    _texture,
-                    drawRect,
-                    BackdropColor * fadeAmount);
+                // If mouse is hovering, check for a click
+                if (_hovering)
+                    if (Controller.GetOneLeftClickDown())
+                        OnClick();
+
+                // This has updated, so return true
+                return true;
             }
-        }
-        #endregion
 
-        #region Interaction Code
-        /// <summary>
-        /// Fired whenever the mouse clicks on this GI_Obj
-        /// </summary>
-        private void OnClick()
-        {
-            if (Clicked != null)
-                Clicked();
+            // This did not update, so return false
+            return false;
         }
 
         /// <summary>
@@ -392,15 +456,96 @@ namespace IsometricProject.Interface
                     Hovering = false;
             }
         }
+        #endregion
 
-        public virtual void Open()
+        #region Draw Code
+        /// <summary>
+        /// Draw this GI_Obj
+        /// </summary>
+        public virtual bool Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
         {
-            Console.WriteLine(this + " will open");
+            // Only draw if this is currently visible
+            if (_visible)
+            {
+                // If a rectangle was passed in, draw to it
+                // Otherwise, draw to the objs rectangle
+                Rectangle drawRect;
+                if (rectangle != null)
+                    drawRect = (Rectangle)rectangle;
+                else
+                    drawRect = _rectangle;
+
+                // Draw
+                spriteBatch.Draw(
+                    _texture,
+                    drawRect,
+                    BackdropColor * fadeAmount);
+
+                // This drew, so return true
+                return true;
+            }
+
+            // This did not draw, so return false
+            return false;
         }
 
+        /// <summary>
+        /// Draw this GI_Obj with a specified color
+        /// </summary>
+        public virtual bool Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, Color backdropColor, float fadeAmount = 1.0f)
+        {
+            // Only draw if this is currently visible
+            if (_visible)
+            {
+                // If a rectangle was passed in, draw to it
+                // Otherwise, draw to the objs rectangle
+                Rectangle drawRect;
+                if (rectangle != null)
+                    drawRect = (Rectangle)rectangle;
+                else
+                    drawRect = _rectangle;
+
+                // Draw
+                spriteBatch.Draw(
+                    _texture,
+                    drawRect,
+                    backdropColor * fadeAmount);
+
+                // This drew, so return true
+                return true;
+            }
+
+            // This did not draw, so return false
+            return false;
+        }
+        #endregion
+
+        #region Interaction Code
+        /// <summary>
+        /// Fired whenever the mouse clicks on this GI_Obj
+        /// </summary>
+        private void OnClick()
+        {
+            if (Clicked != null)
+                Clicked();
+        }
+
+        /// <summary>
+        /// Open this object
+        /// </summary>
+        public virtual void Open()
+        {
+            // Fire the Opened event
+            Opened();
+        }
+
+        /// <summary>
+        /// Close this object
+        /// </summary>
         public virtual void Close()
-        { 
-            
+        {
+            // Fire the Closed event
+            Closed();
         }
         #endregion
     }
@@ -413,17 +558,54 @@ namespace IsometricProject.Interface
     {
         #region Attributes
         protected List<GI_Obj> _objs;
+        protected bool _opening;
+        protected bool _closing;
+        protected int _openCurrentFrame;
+        protected float _openAnimationPercentage;
+
+        protected Vector2 _previousPosition;
         #endregion
 
         #region Properties
+        public override Vector2 Position
+        {
+            get { return base.Position; }
+            set
+            {
+                _previousPosition = Position;
+                base.Position = value;
+            }
+        }
+
         public override bool Hovering
         {
             get { return base.Hovering; }
             set
             {
                 base.Hovering = value;
-                foreach (GI_Obj obj in _objs)
-                    obj.Hovering = false;
+                if (!value)
+                    foreach (GI_Obj obj in _objs)
+                        obj.Hovering = false;
+            }
+        }
+        public virtual bool Opening
+        {
+            get { return _opening; }
+            set
+            {
+                _opening = value;
+                if (value)
+                    _closing = false;
+            }
+        }
+        public virtual bool Closing
+        {
+            get { return _closing; }
+            set
+            {
+                _closing = value;
+                if (value)
+                    _opening = false;
             }
         }
         #endregion
@@ -433,27 +615,48 @@ namespace IsometricProject.Interface
         /// Common constructor code
         /// All constructors should call this method
         /// </summary>
-        private void Construct()
+        private void Construct(bool visible)
         {
+            // ---------- List to hold all contained objs ----------
             _objs = new List<GI_Obj>();
+
+            // ---------- Set initial visibility ----------
+            _visible = visible;
+            if (visible)
+                _openCurrentFrame = _gameInterface.OpenOverFrames;
+            else
+                _openCurrentFrame = 0;
+
+            // ---------- Hook up events ----------
+            PositionChanged += delegate()
+            {
+                foreach (GI_Obj obj in _objs)
+                {
+                    Vector2 relativePosition = obj.Position - _previousPosition;
+                    obj.Position = Position + relativePosition;
+                }
+            };
+
+            Opened += delegate() { Opening = true; Visible = true; };
+            Closed += delegate() { Closing = true; };
         }
 
         /// <summary>
         /// Create a new GI_Container with specified size
         /// </summary>
-        public GI_Container(GameInterface gameInterface, Texture2D texture, int width, int height)
+        public GI_Container(GameInterface gameInterface, Texture2D texture, int width, int height, bool visible)
             : base(gameInterface, texture, width, height)
         {
-            Construct();
+            Construct(visible);
         }
 
         /// <summary>
         /// Create a new GI_Container with specified size and position
         /// </summary>
-        public GI_Container(GameInterface gameInterface, Texture2D texture, int width, int height, int x, int y)
+        public GI_Container(GameInterface gameInterface, Texture2D texture, int width, int height, int x, int y, bool visible)
             : base(gameInterface, texture, width, height, x, y)
         {
-            Construct();
+            Construct(visible);
         }
         #endregion
 
@@ -462,15 +665,22 @@ namespace IsometricProject.Interface
         /// Update this GI_Container and all of its contained objects
         /// </summary>
         /// <param name="gameTime"></param>
-        public override void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
-            // ---------- Update this ----------
-            base.Update(gameTime);
+            // If base updates, then update this as well
+            if (base.Update(gameTime))
+            {
+                // If mouse is hovering, update all contaied objs
+                if (_hovering)
+                    foreach (GI_Obj obj in _objs)
+                        obj.Update(gameTime);
 
-            // ---------- Update contained objs ----------
-            if (_hovering)
-                foreach (GI_Obj obj in _objs)
-                    obj.Update(gameTime);
+                // This updated, so return true
+                return true;
+            }
+
+            // This did not update, so return false
+            return false;
         }
         #endregion
 
@@ -481,14 +691,63 @@ namespace IsometricProject.Interface
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>
         /// <param name="fadeAmount"></param>
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, float fadeAmount = 1.0f)
+        public override bool Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
         {
-            if (_visible)
+            // Adjust for fading
+            if (_opening || _closing)
             {
-                // ---------- Draw contained objs ----------
-                foreach (GI_Obj obj in _objs)
-                    obj.Draw(gameTime, spriteBatch, null, fadeAmount);
+                _openAnimationPercentage = HandleOpenClose();
+                fadeAmount *= _openAnimationPercentage;
             }
+
+            // If base draws, then draw this as well
+            if (base.Draw(gameTime, spriteBatch, rectangle, fadeAmount))
+            {
+                // Draw all cotaied objs
+                DrawContainedObjs(gameTime, spriteBatch, rectangle, fadeAmount);
+
+                // This drew, so return true
+                return true;
+            }
+
+            // This did not draw, so return false
+            return false;
+        }
+
+        /// <summary>
+        /// Draws all contained GI_Objs
+        /// </summary>
+        protected void DrawContainedObjs(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
+        {
+            foreach (GI_Obj obj in _objs)
+                if (_rectangle.Intersects(obj.Rectangle))
+                    obj.Draw(gameTime, spriteBatch, rectangle, fadeAmount);
+        }
+
+        /// <summary>
+        /// Helps with opening and closing animation
+        /// </summary>
+        /// <returns>Value indicating how far open or close this item is</returns>
+        protected float HandleOpenClose()
+        {
+            if (_opening)
+                _openCurrentFrame++;
+            else
+                _openCurrentFrame--;
+
+            if (_openCurrentFrame <= 0)
+            {
+                _openCurrentFrame = 0;
+                Closing = false;
+                Visible = false;
+            }
+            else if (_openCurrentFrame >= _gameInterface.OpenOverFrames)
+            {
+                _openCurrentFrame = _gameInterface.OpenOverFrames;
+                Opening = false;
+            }
+
+            return (float)((float)_openCurrentFrame / (float)_gameInterface.OpenOverFrames);
         }
         #endregion
     }

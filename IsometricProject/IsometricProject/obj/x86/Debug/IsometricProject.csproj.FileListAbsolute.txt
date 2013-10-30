@@ -16,8 +16,6 @@ Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\ob
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.exe
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.pdb
-Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\turdexample.xnb
-Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\GameObjects\Tiles.xnb
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\grasstile.xnb
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\stonesandtile.xnb
 Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\stonetile.xnb
@@ -47,3 +45,10 @@ D:\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug
 D:\Repositories\IsometricProject\IsometricProject\IsometricProject\obj\x86\Debug\IsometricProject.pdb
 D:\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\turdmonkey.xnb
 D:\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Fonts\interfacefont.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\tileselector.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\sandtile.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\rocktile.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Fonts\interfacefont.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\ReferenceData\tiletypes.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\turdmonkey.xnb
+Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\poopies.xnb
