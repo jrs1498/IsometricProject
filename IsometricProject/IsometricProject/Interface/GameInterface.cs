@@ -17,6 +17,10 @@ namespace IsometricProject.Interface
         private List<GI_Obj> _objs;
 
         // ========== Interface Functionality Attributes ==========
+        private bool _mouseInInterface;
+        // ========================================================
+
+        // ========== Text Field Attributes ==========
         private char[] _validChars = 
         {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
         'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1',
@@ -31,8 +35,8 @@ namespace IsometricProject.Interface
 
         private int _traceThickness         = 2;
         private int _titlebarThickness      = 20;
-        private Color _traceColor           = new Color(200, 200, 200, 175);
-        private Color _backdropColor        = new Color(0, 0, 0, 175);
+        private Color _traceColor           = new Color(10, 10, 10, 200);
+        private Color _backdropColor        = new Color(200, 200, 200, 200);
 
         private int _initialWindowWidth     = 700;
         private int _initialWindowHeight    = 500;
@@ -53,6 +57,15 @@ namespace IsometricProject.Interface
         public GameScreen Screen
         {
             get { return _screen; }
+        }
+        public bool MouseInInterface
+        {
+            get { return _mouseInInterface; }
+            set
+            {
+                _mouseInInterface = value;
+                _screen.GameLevel.MainLayer.TileSystem.UpdatePlayerControls = !value;
+            }
         }
 
         public char[] ValidChars
@@ -160,6 +173,7 @@ namespace IsometricProject.Interface
 
             tools.AddButton(() => { _screen.GameLevel.MainLayer.TileSystem.CurrentTool = TileSystem.Tool.elevate; }, "Elevate");
             tools.AddButton(() => { _screen.GameLevel.MainLayer.TileSystem.CurrentTool = TileSystem.Tool.smooth; }, "Smooth");
+            tools.AddButton(() => { _screen.GameLevel.MainLayer.TileSystem.CurrentTool = TileSystem.Tool.zeroelevation; }, "Zero Elevation");
 
             mainmenu.AddSubMenu(tools, "Tools");
 
@@ -221,6 +235,8 @@ namespace IsometricProject.Interface
         /// </summary>
         public void Update(GameTime gameTime)
         {
+            MouseInInterface = false;
+
             foreach (GI_Obj obj in _objs)
                 obj.Update(gameTime);
         }
@@ -424,8 +440,11 @@ namespace IsometricProject.Interface
 
                 // If mouse is hovering, check for a click
                 if (_hovering)
+                {
+                    _gameInterface.MouseInInterface = true;
                     if (Controller.GetOneLeftClickDown())
                         OnClick();
+                }
 
                 // This has updated, so return true
                 return true;
@@ -700,10 +719,10 @@ namespace IsometricProject.Interface
                 fadeAmount *= _openAnimationPercentage;
             }
 
-            // If base draws, then draw this as well
+            // Base will draw the backdrop. If it draws, then so will this
             if (base.Draw(gameTime, spriteBatch, rectangle, fadeAmount))
             {
-                // Draw all cotaied objs
+                // Draw all contained objs
                 DrawContainedObjs(gameTime, spriteBatch, rectangle, fadeAmount);
 
                 // This drew, so return true

@@ -59,7 +59,10 @@ namespace IsometricProject.Interface
                 backdropColor *= fadeAmount;
 
                 // ---------- Draw backdrop ----------
-                spriteBatch.Draw(_texture, drawRect, backdropColor);
+                if (_hovering)
+                {
+                    spriteBatch.Draw(_texture, drawRect, backdropColor);
+                }
 
                 // ---------- Draw title ----------
                 Vector2 textSize = InterfaceFont.MeasureString(_title);

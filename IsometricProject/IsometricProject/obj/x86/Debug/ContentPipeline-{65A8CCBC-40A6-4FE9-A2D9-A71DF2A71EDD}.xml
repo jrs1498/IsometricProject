@@ -35,7 +35,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Textures\tileselector.xnb</Output>
-      <Time>2013-10-21T08:00:12.794689-04:00</Time>
+      <Time>2013-10-31T16:30:16.998214-04:00</Time>
     </Item>
     <Item>
       <Source>Textures\sandtile.png</Source>
@@ -89,7 +89,7 @@
       <Processor>PassThroughProcessor</Processor>
       <Options>None</Options>
       <Output>Z:\IGMProfile\Repositories\IsometricProject\IsometricProject\IsometricProject\bin\x86\Debug\Content\Levels\poopies.xnb</Output>
-      <Time>2013-10-30T15:20:39.543751-04:00</Time>
+      <Time>2013-10-31T16:51:22.801107-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -130,7 +130,7 @@
       </Assembly>
       <Assembly>
         <Key>Z:\IGMProfile\Repositories\IsometricProject\DataTypes\bin\x86\Debug\DataTypes.dll</Key>
-        <Value>2013-10-30T11:57:52.352399-04:00</Value>
+        <Value>2013-10-31T14:27:59.233024-04:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>

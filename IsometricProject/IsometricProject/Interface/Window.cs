@@ -133,26 +133,29 @@ namespace IsometricProject.Interface
         /// <returns>True if currently drawing</returns>
         public override bool Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle? rectangle, float fadeAmount = 1.0f)
         {
+            // Base draws the backdrop, followed by contained objects.
+            // If base draws, then this will draw after
             if (base.Draw(gameTime, spriteBatch, rectangle, fadeAmount))
             {
-                // Declare colors we will use
-                Color traceColor = TraceColor;
+                // This rectangle will be used to draw the tracelines
+                Rectangle drawRect  = _rectangle;
+
+                Color traceColor    = TraceColor;
                 Color backdropColor = BackdropColor;
 
-                // If the window is opening or closing, we must apply fade in or out
                 if (_opening || _closing)
                 {
-                    traceColor *= _openAnimationPercentage;
-                    backdropColor *= _openAnimationPercentage;
+                    traceColor      *= _openAnimationPercentage;
+                    backdropColor   *= _openAnimationPercentage;
                 }
 
-                // This rectangle will be used to draw the tracelines
-                Rectangle drawRect = _rectangle;
+                traceColor          *= fadeAmount;
+                backdropColor       *= fadeAmount;
 
                 // ---------- Left and right sides ----------
-                drawRect.Width = TraceThickness;
-                drawRect.Height -= TraceThickness + TitlebarThickness;
-                drawRect.Y += TitlebarThickness;
+                drawRect.Width      = TraceThickness;
+                drawRect.Height     -= TraceThickness + TitlebarThickness;
+                drawRect.Y          += TitlebarThickness;
                 for (int i = 0; i < 2; i++)
                 {
                     drawRect.X += ((i % 2) * (Width - TraceThickness));
@@ -160,23 +163,23 @@ namespace IsometricProject.Interface
                 }
 
                 // ---------- Bottom side ----------
-                drawRect.Width = Width;
-                drawRect.Height = TraceThickness;
-                drawRect.X = Left;
-                drawRect.Y = Bottom - TraceThickness;
+                drawRect.Width      = Width;
+                drawRect.Height     = TraceThickness;
+                drawRect.X          = Left;
+                drawRect.Y          = Bottom - TraceThickness;
                 spriteBatch.Draw(_texture, drawRect, traceColor);
 
                 // ---------- Title bar ----------
-                drawRect.Height = TitlebarThickness;
-                drawRect.Y = Top;
+                drawRect.Height     = TitlebarThickness;
+                drawRect.Y          = Top;
                 spriteBatch.Draw(_texture, drawRect, traceColor);
 
                 // ---------- Title ----------
                 Vector2 titlePosition;
-                titlePosition.X = drawRect.X + 10;
-                titlePosition.Y = drawRect.Bottom - (drawRect.Height / 2);
-                Vector2 titleSize = InterfaceFont.MeasureString(_title);
-                titlePosition.Y -= titleSize.Y / 2;
+                titlePosition.X     = drawRect.X + 10;
+                titlePosition.Y     = drawRect.Bottom - (drawRect.Height / 2);
+                Vector2 titleSize   = InterfaceFont.MeasureString(_title);
+                titlePosition.Y     -= titleSize.Y / 2;
                 spriteBatch.DrawString(InterfaceFont, _title, titlePosition, backdropColor);
 
                 // This drew, so return true
@@ -554,7 +557,6 @@ namespace IsometricProject.Interface
             Construct();
 
             GI_Label label = new GI_Label(gameInterface, texture, cell, labelText, this);
-            cell.AddObject(label);
         }
         #endregion
 
